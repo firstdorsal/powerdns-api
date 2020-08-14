@@ -7,13 +7,13 @@ module.exports = class {
         this.apikey = apikey;
     }
 
-    canName(name) {
+    absoluteName(name) {
         if (name[name.length - 1] !== '.') {
             return name + '.';
         } else {
             return name;
         }
-    } //returns name in canonical form with a . at the end example.com -> example.com. and example.com. -> example.com.
+    } //takes domain name as string; returns domain name as string in absolute form with a . at the end; example.com -> example.com. and example.com. -> example.com.;
 
     getZones() {
         return f(this.baseurl + '/zones', {
@@ -28,7 +28,7 @@ module.exports = class {
     } //returns array of zones; must be awaited
 
     getZoneWithMeta(zoneName) {
-        zoneName = this.canName(zoneName);
+        zoneName = this.absoluteName(zoneName);
         return f(this.baseurl + '/zones/' + zoneName, {
             method: 'GET',
             headers: {
@@ -38,10 +38,10 @@ module.exports = class {
         }).then((res) => {
             return res.json();
         });
-    } //returns single zone with meta information; must be awaited
+    } //returns single zone with meta information as object; must be awaited;
 
     getZone(zoneName) {
-        zoneName = this.canName(zoneName);
+        zoneName = this.absoluteName(zoneName);
         return f(this.baseurl + '/zones/' + zoneName, {
             method: 'GET',
             headers: {
@@ -57,10 +57,10 @@ module.exports = class {
                 return null
             }
         });
-    } //returns array with rrsets; must be awaited 
+    } //returns array with rrsets; must be awaited;
 
     setRecords(records) {
-        const dname = this.canName(records[0].name);
+        const dname = this.absoluteName(records[0].name);
         const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
 
 
@@ -72,21 +72,18 @@ module.exports = class {
                     "content": records[i].content[j],
                     "disabled": false,
                     "ttl": records[i].ttl,
-                    "name": this.canName(records[i].name),
+                    "name": this.absoluteName(records[i].name),
                     "type": records[i].type
                 });
             }
             rrsets.push({
-                "name": this.canName(records[i].name),
+                "name": this.absoluteName(records[i].name),
                 "type": records[i].type,
                 "ttl": records[i].ttl,
                 "changetype": "REPLACE",
                 records: recordsOut
             });
-
         }
-
-
         return r(this.baseurl + '/zones/' + zoneName, {
             method: 'PATCH',
             headers: {
@@ -106,22 +103,19 @@ module.exports = class {
             console.error(err);
             return false;
         });
-    } //sets records; if records exist it replaces them; returns true on success; must be awaited
+    } //takes records as array; sets records; if records exist it replaces them; returns true on success; must be awaited;
 
     deleteRecords(records) {
-        const dname = this.canName(records[0].name);
+        const dname = this.absoluteName(records[0].name);
         const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
-
 
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
-
             rrsets.push({
-                "name": this.canName(records[i].name),
+                "name": this.absoluteName(records[i].name),
                 "type": records[i].type,
                 "changetype": "DELETE",
             });
-
         }
 
         return r(this.baseurl + '/zones/' + zoneName, {
@@ -143,7 +137,7 @@ module.exports = class {
             console.error(err);
             return false;
         });
-    } //deletes records; returns true on success; must be awaited 
+    } //takes records as array; deletes records; returns true on success; must be awaited;
 
     search(s) {
         if (s.max === undefined) s.max = 10;
@@ -163,7 +157,7 @@ module.exports = class {
                 return null
             }
         });
-    } //searches for elements in pdns; returns found elements as array; if max is not specified it defaults to 10 returned records; if object_type is not defined it defaults to record; must be awaited 
+    } //takes object with query as string; searches for elements in pdns server; returns found elements as array; if max is not specified it defaults to 10 returned records; if object_type is not defined it defaults to the type "record"; must be awaited;
 
     async appendRecord(record) {
         const a = await this.search({
@@ -175,7 +169,7 @@ module.exports = class {
             }
         }
         return await this.setRecords([record]);
-    } //appends ONE record NOT replacing other records with the same record name; the single input record can contain more than one object in the content array; returns true on success; must be awaited 
+    } //takes one records as object; appends ONE record NOT replacing other records with the same record name; the single input record can contain more than one string in the content array; returns true on success; must be awaited; 
 }
 
 
