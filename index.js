@@ -51,7 +51,7 @@ const r = require("request-promise");
 
     const {
         PowerdnsClient
-    } = require('powerdns-api');
+    } = require('@firstdorsal/powerdns-api');
 
     const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 

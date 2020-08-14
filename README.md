@@ -9,7 +9,7 @@ npm i @firstdorsal/powerdns-api
 
     const {
         PowerdnsClient
-    } = require('powerdns-api');
+    } = require('@firstdorsal/powerdns-api');
 
     const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 
@@ -40,7 +40,6 @@ process.env.PDNS_API_KEY
 
 # Documentation
 **[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
-
 ## Modules
 
 <dl>
@@ -109,7 +108,7 @@ Create a powerdns client.
 
     const {
         PowerdnsClient
-    } = require('powerdns-api');
+    } = require('@firstdorsal/powerdns-api');
 
     const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 
