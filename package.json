@@ -1,6 +1,6 @@
 {
   "name": "@firstdorsal/powerdns-api",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "nodejs powerdns api wrapper",
   "main": "index.js",
   "author": "Paul Colin Hennig",
@@ -13,5 +13,7 @@
   "repository": {
     "type": "git",
     "url": "http://git.firstdorsal.eu/firstdorsal/powerdns-api.git"
-  }
+  },
+  "homepage": "https://firstdorsal.eu/doc/powerdns-api/"
+
 }
