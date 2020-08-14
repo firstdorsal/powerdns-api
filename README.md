@@ -17,6 +17,10 @@ npm i @firstdorsal/powerdns-api
 })();
 
 ```
+
+# Documentation
+**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+
 ## What is dotenv?
 The line "require('dotenv').config();" gets the contents of a file called ".env" in which you should store your global and secret variables.
 
@@ -38,8 +42,7 @@ process.env.PDNS_API_KEY
 ```
 
 
-# Documentation
-**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+
 
 ## Modules
 
