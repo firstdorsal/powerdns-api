@@ -8,10 +8,10 @@ npm i @firstdorsal/powerdns-api
     require('dotenv').config();
 
     const {
-        Powerdns
+        PowerdnsClient
     } = require('powerdns-api');
 
-    const pdns = new Powerdns(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
+    const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 
     console.log(await pdns.getZone('example.com'));
 })();

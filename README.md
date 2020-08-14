@@ -8,19 +8,15 @@ npm i @firstdorsal/powerdns-api
     require('dotenv').config();
 
     const {
-        Powerdns
+        PowerdnsClient
     } = require('powerdns-api');
 
-    const pdns = new Powerdns(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
+    const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 
     console.log(await pdns.getZone('example.com'));
 })();
 
 ```
-
-# Documentation
-**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
-
 ## What is dotenv?
 The line "require('dotenv').config();" gets the contents of a file called ".env" in which you should store your global and secret variables.
 
@@ -42,7 +38,8 @@ process.env.PDNS_API_KEY
 ```
 
 
-
+# Documentation
+**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
 
 ## Modules
 
@@ -82,7 +79,7 @@ process.env.PDNS_API_KEY
 ### powerdns-api.PowerdnsClient
 Class representing the powerdns client
 
-**Kind**: static class of [<code>powerdns-api</code>](#module_powerdns-api)
+**Kind**: static class of [<code>powerdns-api</code>](#module_powerdns-api)  
 
 * [.PowerdnsClient](#module_powerdns-api.PowerdnsClient)
     * [new module.exports.PowerdnsClient(baseurl, apikey)](#new_module_powerdns-api.PowerdnsClient_new)
@@ -105,16 +102,16 @@ Create a powerdns client.
 | baseurl | <code>string</code> | The base url where the api can be found |
 | apikey | <code>string</code> | The api key for the powerdns endpoint |
 
-**Example**
+**Example**  
 ```js
 (async () => {
     require('dotenv').config();
 
     const {
-        Powerdns
+        PowerdnsClient
     } = require('powerdns-api');
 
-    const pdns = new Powerdns(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
+    const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
 
     console.log(await pdns.getZone('example.com'));
 })();
@@ -124,9 +121,9 @@ Create a powerdns client.
 #### powerdnsClient.getZones() ⇒ <code>Array</code>
 Returns array of zones on pdns server.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>Array</code> - - array of zones on the server
-**Example**
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Array</code> - - array of zones on the server  
+**Example**  
 ```js
 await pdns.getZones();
 ```
@@ -135,14 +132,14 @@ await pdns.getZones();
 #### powerdnsClient.getZoneWithMeta(zoneName) ⇒ <code>object</code>
 Returns single zone with meta information.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>object</code> - - the zone with meta information
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>object</code> - - the zone with meta information  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | zoneName | <code>string</code> | takes a domain name |
 
-**Example**
+**Example**  
 ```js
 await pdns.getZoneWithMeta();
 ```
@@ -151,14 +148,14 @@ await pdns.getZoneWithMeta();
 #### powerdnsClient.getZone(zoneName) ⇒ <code>object</code>
 Returns array with rrsets.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>object</code> - - just the rrsets of the zone
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>object</code> - - just the rrsets of the zone  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | zoneName | <code>string</code> | takes a domain name |
 
-**Example**
+**Example**  
 ```js
 await pdns.getZone('example.com');
 ```
@@ -167,14 +164,14 @@ await pdns.getZone('example.com');
 #### powerdnsClient.setRecords(records) ⇒ <code>boolean</code>
 Takes records as array and sets them. If records exist it replaces them.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | records | [<code>Records</code>](#Records) | array containing the records |
 
-**Example**
+**Example**  
 ```js
 await pdns.setRecords([{
            name: "example.com",
@@ -188,14 +185,14 @@ await pdns.setRecords([{
 #### powerdnsClient.deleteRecords(records) ⇒ <code>boolean</code>
 Takes records as array and deletes them.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | records | [<code>Records</code>](#Records) | array containing the records to be deleted |
 
-**Example**
+**Example**  
 ```js
 await pdns.deleteRecords([{
            name: "example.com",
@@ -207,14 +204,14 @@ await pdns.deleteRecords([{
 #### powerdnsClient.search(search) ⇒ <code>object</code>
 takes object with query as string; searches for elements in pdns server; returns found elements as array; if max is not specified it defaults to 10 returned records; if object_type is not defined it defaults to the type "record"; must be awaited;
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>object</code> - - search results
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>object</code> - - search results  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | search | [<code>Search</code>](#Search) | object with the query paramter |
 
-**Example**
+**Example**  
 ```js
 await pdns.search({
            query: 'example.com',
@@ -227,14 +224,14 @@ await pdns.search({
 #### powerdnsClient.appendRecord(record) ⇒ <code>boolean</code>
 Takes ONE record as object and appends it not replacing other records with the same name.
 
-**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | record | [<code>Record</code>](#Record) | array containing the records to be deleted |
 
-**Example**
+**Example**  
 ```js
 await pdns.appendRecord({
            name: "example.com",
@@ -246,7 +243,7 @@ await pdns.appendRecord({
 <a name="Search"></a>
 
 ## Search : <code>object</code>
-**Kind**: global typedef
+**Kind**: global typedef  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -255,15 +252,15 @@ await pdns.appendRecord({
 | [max] | <code>number</code> | <code>10</code> | limits the ammount of returned values |
 | [object_type] | <code>string</code> | <code>&quot;record&quot;</code> | for what kind of pdns object to search |
 
-**Example**
+**Example**  
 ```js
 {query: 'example.com', max: 100, object_type: "zone"}
 ```
 <a name="Records"></a>
 
 ## Records : [<code>Array.&lt;Record&gt;</code>](#Record)
-**Kind**: global typedef
-**Example**
+**Kind**: global typedef  
+**Example**  
 ```js
 [{
     name: "example.com",
@@ -280,7 +277,7 @@ await pdns.appendRecord({
 <a name="Record"></a>
 
 ## Record : <code>object</code>
-**Kind**: global typedef
+**Kind**: global typedef  
 **Properties**
 
 | Name | Type | Description |
@@ -290,7 +287,7 @@ await pdns.appendRecord({
 | ttl | <code>number</code> | time to live of the record |
 | content | <code>Array</code> | value array with content of the record |
 
-**Example**
+**Example**  
 ```js
 {name: "example.com", type: "A", ttl: 300, content: ['1.1.1.1', '8.8.8.8']}
 ```
