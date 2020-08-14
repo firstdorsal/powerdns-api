@@ -1,3 +1,25 @@
+# Install
+```
+npm i @firstdorsal/powerdns-api
+```
+# Usage
+```js
+(async () => {
+    require('dotenv').config();
+
+    const {
+        Powerdns
+    } = require('powerdns-api');
+
+    const pdns = new Powerdns(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
+
+    console.log(await pdns.getZone('example.com'));
+})();
+
+```
+# Documentation
+**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+
 ## Modules
 
 <dl>
