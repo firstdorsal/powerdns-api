@@ -7,9 +7,9 @@ const r = require("request-promise");
 /** 
  * @typedef Search
  * @type {object}
- * @prop {string} query - query to search for
- * @prop {number} [max=10] - limits the ammount of returned values
- * @prop {string} [object_type=record] - for what kind of pdns object to search
+ * @prop {string} query query to search for
+ * @prop {number} [max=10] limits the ammount of returned values
+ * @prop {string} [object_type=record] for what kind of pdns object to search
  * @example
  * {query: 'example.com', max: 100, object_type: "zone"}
  */
@@ -34,10 +34,10 @@ const r = require("request-promise");
 /**
  * @typedef Record
  * @type {object}
- * @prop {string} name - key name of the record
- * @prop {string} type - type of the record
- * @prop {number} ttl - time to live of the record
- * @prop {Array} content - value array with content of the record
+ * @prop {string} name key name of the record
+ * @prop {string} type type of the record
+ * @prop {number} ttl time to live of the record
+ * @prop {Array} content value array with content of the record
  * @example
  * {name: "example.com", type: "A", ttl: 300, content: ['1.1.1.1', '8.8.8.8']}
  *
@@ -63,8 +63,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Create a powerdns client.
      * @constructor
-     * @param {string} baseurl - The base url where the api can be found
-     * @param {string} apikey - The api key for the powerdns endpoint
+     * @param {string} baseurl The base url where the api can be found
+     * @param {string} apikey The api key for the powerdns endpoint
      */
     constructor(baseurl, apikey) {
         this.baseurl = baseurl;
@@ -76,8 +76,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes domain name as string. Returns the domain name as string in absolute form with a . at the end. example.com -> example.com. and example.com. -> example.com.
      * @private
-     * @param {string} name - takes a domain name
-     * @returns {string} - the domain name in absolute form ending with a dot
+     * @param {string} name takes a domain name
+     * @returns {string} the domain name in absolute form ending with a dot
      */
     absoluteName(name) {
         if (name[name.length - 1] !== '.') {
@@ -89,7 +89,7 @@ module.exports.PowerdnsClient = class {
     /**
      * Returns array of zones on pdns server.
      * @async
-     * @returns {Array} - array of zones on the server
+     * @returns {Array} array of zones on the server
      * @example 
        await pdns.getZones();
      */
@@ -107,8 +107,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Returns single zone with meta information. 
      * @async
-     * @param {string} zoneName - takes a domain name
-     * @returns {object} - the zone with meta information
+     * @param {string} zoneName takes a domain name
+     * @returns {object} the zone with meta information
      * @example 
        await pdns.getZoneWithMeta();
      */
@@ -127,8 +127,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Returns array with rrsets.
      * @async
-     * @param {string} zoneName - takes a domain name
-     * @returns {object} - just the rrsets of the zone
+     * @param {string} zoneName takes a domain name
+     * @returns {object} just the rrsets of the zone
      * @example 
        await pdns.getZone('example.com');
      */
@@ -159,8 +159,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes records as array and sets them. If records exist it replaces them.
      * @async
-     * @param {Records} records - array containing the records
-     * @returns {boolean} - boolean indicating the success of the operation
+     * @param {Records} records array containing the records
+     * @returns {boolean} boolean indicating the success of the operation
      * @example 
        await pdns.setRecords([{
            name: "example.com",
@@ -221,8 +221,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes records as array and deletes them.
      * @async
-     * @param {Records} records - array containing the records to be deleted
-     * @returns {boolean} - boolean indicating the success of the operation
+     * @param {Records} records array containing the records to be deleted
+     * @returns {boolean} boolean indicating the success of the operation
      * @example
        await pdns.deleteRecords([{
            name: "example.com",
@@ -264,10 +264,10 @@ module.exports.PowerdnsClient = class {
     }
 
     /**
-     * takes object with query as string; searches for elements in pdns server; returns found elements as array; if max is not specified it defaults to 10 returned records; if object_type is not defined it defaults to the type "record"; must be awaited;
+     * Takes Search object and searches for matching elements in the pdns server.
      * @async
-     * @param {Search} search - object with the query paramter
-     * @returns {object} - search results
+     * @param {Search} search object with the query paramter
+     * @returns {object} search results
      * @example
        await pdns.search({
            query: 'example.com',
@@ -301,8 +301,8 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes ONE record as object and appends it not replacing other records with the same name.
      * @async
-     * @param {Record} record - array containing the records to be deleted
-     * @returns {boolean} - boolean indicating the success of the operation
+     * @param {Record} record array containing the records to be deleted
+     * @returns {boolean} boolean indicating the success of the operation
      * @example
        await pdns.appendRecord({
            name: "example.com",
