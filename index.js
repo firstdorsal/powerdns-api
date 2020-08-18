@@ -80,11 +80,8 @@ module.exports.PowerdnsClient = class {
      * @returns {string} the domain name in absolute form ending with a dot
      */
     absoluteName(name) {
-        if (name[name.length - 1] !== '.') {
-            return name + '.';
-        } else {
-            return name;
-        }
+        if (name[name.length - 1] !== '.') return name + '.';
+        return name;
     }
     /**
      * Returns array of zones on pdns server.
@@ -133,8 +130,9 @@ module.exports.PowerdnsClient = class {
        await pdns.getZone('example.com');
      */
     getZone(zoneName) {
-        zoneName = this.absoluteName(zoneName);
-        return f(this.baseurl + '/zones/' + zoneName, {
+        const dname = this.absoluteName(zoneName);
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'GET',
             headers: {
                 'X-Api-Key': this.apikey
@@ -143,11 +141,8 @@ module.exports.PowerdnsClient = class {
         }).then((res) => {
             return res.json().catch((err) => {});
         }).then((json) => {
-            if (json && json.rrsets) {
-                return json.rrsets
-            } else {
-                return null
-            }
+            if (json && json.rrsets) return json.rrsets;
+            return null;
         });
     }
 
@@ -171,6 +166,7 @@ module.exports.PowerdnsClient = class {
      */
 
     setRecords(records) {
+        if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
 
         const dname = this.absoluteName(records[0].name);
         const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
@@ -204,11 +200,9 @@ module.exports.PowerdnsClient = class {
             },
             json: true
         }).then((res) => {
-            if (res === undefined) {
-                return true;
-            } else {
-                return false;
-            }
+            if (res === undefined) return true;
+            return false;
+
         }).catch((err) => {
             console.error(err);
             return false;
@@ -230,6 +224,7 @@ module.exports.PowerdnsClient = class {
        }]);
      */
     deleteRecords(records) {
+        if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
         const dname = this.absoluteName(records[0].name);
         const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
 
@@ -252,11 +247,8 @@ module.exports.PowerdnsClient = class {
             },
             json: true
         }).then((res) => {
-            if (res === undefined) {
-                return true;
-            } else {
-                return false;
-            }
+            if (res === undefined) return true;
+            return false;
         }).catch((err) => {
             console.error(err);
             return false;
@@ -275,11 +267,10 @@ module.exports.PowerdnsClient = class {
            object_type: "zone"
        });
      */
-    search(search) {
-
-        if (search.max === undefined) search.max = 10;
-        if (search.object_type === undefined) search.object_type = 'record';
-        if (search.query === undefined) return null;
+    search(search = {}) {
+        if (!search.max) search.max = 10;
+        if (!search.object_type) search.object_type = 'record';
+        if (!search.query) return null;
         return f(`${this.baseurl}/search-data?q=${search.query}&max=${search.max}&object_type=${search.object_type}`, {
             method: 'GET',
             headers: {
@@ -291,11 +282,9 @@ module.exports.PowerdnsClient = class {
                 console.log(err);
             });
         }).then((json) => {
-            if (json) {
-                return json
-            } else {
-                return null
-            }
+            if (json) return json;
+            return null;
+
         });
     }
     /**
@@ -317,9 +306,7 @@ module.exports.PowerdnsClient = class {
         });
         if (a) {
             for (let i = 0; i < a.length; i++) {
-                if (a[i] && a[i].type !== 'PTR') {
-                    record.content.push(a[i].content);
-                }
+                if (a[i] && a[i].type !== 'PTR') record.content.push(a[i].content);
             }
         }
         return await this.setRecords([record]);

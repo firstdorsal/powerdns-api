@@ -40,6 +40,11 @@ process.env.PDNS_API_KEY
 
 # Documentation
 **[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+
+# Need help?
+Feel free to contact me via xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu in english or german
+
+
 ## Modules
 
 <dl>
@@ -121,7 +126,7 @@ Create a powerdns client.
 Returns array of zones on pdns server.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Array</code> - - array of zones on the server  
+**Returns**: <code>Array</code> - array of zones on the server  
 **Example**  
 ```js
 await pdns.getZones();
@@ -132,7 +137,7 @@ await pdns.getZones();
 Returns single zone with meta information.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>object</code> - - the zone with meta information  
+**Returns**: <code>object</code> - the zone with meta information  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -148,7 +153,7 @@ await pdns.getZoneWithMeta();
 Returns array with rrsets.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>object</code> - - just the rrsets of the zone  
+**Returns**: <code>object</code> - just the rrsets of the zone  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -164,7 +169,7 @@ await pdns.getZone('example.com');
 Takes records as array and sets them. If records exist it replaces them.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
+**Returns**: <code>boolean</code> - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -185,7 +190,7 @@ await pdns.setRecords([{
 Takes records as array and deletes them.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
+**Returns**: <code>boolean</code> - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -201,10 +206,10 @@ await pdns.deleteRecords([{
 <a name="module_powerdns-api.PowerdnsClient+search"></a>
 
 #### powerdnsClient.search(search) ⇒ <code>object</code>
-takes object with query as string; searches for elements in pdns server; returns found elements as array; if max is not specified it defaults to 10 returned records; if object_type is not defined it defaults to the type "record"; must be awaited;
+Takes Search object and searches for matching elements in the pdns server.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>object</code> - - search results  
+**Returns**: <code>object</code> - search results  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -224,7 +229,7 @@ await pdns.search({
 Takes ONE record as object and appends it not replacing other records with the same name.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>boolean</code> - - boolean indicating the success of the operation  
+**Returns**: <code>boolean</code> - boolean indicating the success of the operation  
 
 | Param | Type | Description |
 | --- | --- | --- |

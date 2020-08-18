@@ -40,3 +40,6 @@ process.env.PDNS_API_KEY
 
 # Documentation
 **[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+
+# Need help?
+Feel free to contact me via xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu in english or german
