@@ -46,3 +46,6 @@ Feel free to contact me via xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal
 
 ## Automatic Let's Encrypt certificates via DNS
 [acme-dns-01-powerdns](https://www.npmjs.com/package/acme-dns-01-powerdns)
+
+## PDNS WEB API Documentation
+https://doc.powerdns.com/authoritative/http-api/index.html
