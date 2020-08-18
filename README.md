@@ -44,6 +44,10 @@ process.env.PDNS_API_KEY
 # Need help?
 Feel free to contact me via xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu in english or german
 
+## Automatic Let's Encrypt certificates via DNS
+[acme-dns-01-powerdns](https://www.npmjs.com/package/acme-dns-01-powerdns)
+
+
 
 ## Modules
 
