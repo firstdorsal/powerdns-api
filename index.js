@@ -5,11 +5,23 @@ const r = require("request-promise");
 
 
 /** 
+ * @typedef Cryptokey
+ * @type {object}      
+ * @prop {'ksk'|'zsk'|'csk'} keytype The type of the key possible values are 
+ * @prop {boolean} active Whether or not the key is in active use      
+ * @prop {boolean} published Whether or not the DNSKEY record is published in the zone      
+ * @prop {string} dnskey The DNSKEY record for this key      
+ * @prop {string} privatekey The private key in ISC format      
+ * @prop {string} algorithm The name of the algorithm of the key, should be a mnemonic
+ */
+
+
+/** 
  * @typedef Search
  * @type {object}
  * @prop {string} query query to search for
  * @prop {number} [max=10] limits the ammount of returned values
- * @prop {string} [object_type=record] for what kind of pdns object to search
+ * @prop {'all'|'zone'|'record'|'comment'} [object_type=record] for what kind of pdns object to search
  * @example
  * {query: 'example.com', max: 100, object_type: "zone"}
  */
@@ -84,7 +96,7 @@ module.exports.PowerdnsClient = class {
         return name;
     }
     /**
-     * Returns array of zones on pdns server.
+     * Returns array of all zones on pdns server.
      * @async
      * @returns {Array} array of zones on the server
      * @example 
@@ -101,6 +113,39 @@ module.exports.PowerdnsClient = class {
             return res.json();
         });
     }
+
+    /**
+     * Creates zone/domain and returns its SOA record on success.
+
+     * @async
+     * @param {string} zoneName takes a domain name
+     * @param {('Native'|'Master'|'Slave')} [kind=Native] takes the kind of zone you want
+     * @returns {Object} just the rrsets of the zone
+     * @example 
+       await pdns.createZone('example.com');
+     */
+    createZone(zoneName, kind = 'Native') {
+        const dname = this.absoluteName(zoneName);
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        return r(`${this.baseurl}/zones`, {
+            method: 'post',
+            headers: {
+                'X-Api-Key': this.apikey
+            },
+            body: {
+                name: zoneNameSan + '.',
+                kind
+            },
+            json: true
+        }).then((res) => {
+            if (!res.rrsets) return false;
+            return res.rrsets[0]
+        }).catch((err) => {
+            throw new Error(err.error.error);
+        });
+    }
+
+
     /**
      * Returns single zone with meta information. 
      * @async
@@ -122,7 +167,7 @@ module.exports.PowerdnsClient = class {
         });
     }
     /**
-     * Returns array with rrsets.
+     * Returns array with rrsets for zone.
      * @async
      * @param {string} zoneName takes a domain name
      * @returns {object} just the rrsets of the zone
@@ -139,7 +184,7 @@ module.exports.PowerdnsClient = class {
             },
             json: true
         }).then((res) => {
-            return res.json().catch((err) => {});
+            return res.json().catch(() => {});
         }).then((json) => {
             if (json && json.rrsets) return json.rrsets;
             return null;
@@ -148,8 +193,29 @@ module.exports.PowerdnsClient = class {
 
 
 
-
-
+    /**
+     * Deletes the whole zone with all attached metadata and rrsets.
+     * @async
+     * @param {string} zoneName takes a domain name
+     * @returns {boolean} true on success
+     * @example 
+       await pdns.deleteZone('example.com');
+     */
+    deleteZone(zoneName) {
+        const dname = this.absoluteName(zoneName);
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        return r(this.baseurl + '/zones/' + zoneNameSan, {
+            method: 'DELETE',
+            headers: {
+                'X-Api-Key': this.apikey
+            },
+            json: true
+        }).then((res) => {
+            if (res === undefined) return true;
+        }).catch((err) => {
+            throw new Error(err.error.error);
+        })
+    }
 
     /**
      * Takes records as array and sets them. If records exist it replaces them.
@@ -310,5 +376,41 @@ module.exports.PowerdnsClient = class {
             }
         }
         return await this.setRecords([record]);
+    }
+
+
+    /**
+     * Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your own please read the original [documentation]{@link https://doc.powerdns.com/authoritative/http-api/cryptokey.html} and put it in the Cryptokey parameter.
+     * @async
+     * @param {string} zoneName name of the zone/domain 
+     * @param {Cryptokey} [cryptokey={keytype: "ksk", active: true}] a Cryptokey
+     * @param {boolean} [returnPrivateKey=false] setting to true returns the private key with the answer
+     * @returns {Object} ob success the public key and info will be returned
+     * @example
+        await pdns.createCryptokey("example.com");
+
+     */
+    createCryptokey(zoneName, cryptokey = {
+        keytype: "ksk",
+        active: true
+    }, returnPrivateKey = false) {
+        if (!zoneName) throw new Error('Missing zone/domain name');
+        if (!cryptokey.keytype) throw new Error('Missing keytype');
+
+        const body = cryptokey;
+        const dname = this.absoluteName(zoneName);
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        return r(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
+            method: 'POST',
+            headers: {
+                'X-Api-Key': this.apikey
+            },
+            body,
+            json: true
+        }).then((res) => {
+            if (returnPrivateKey) return res;
+            delete res.privatekey;
+            return res;
+        })
     }
 }

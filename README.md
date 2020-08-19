@@ -39,16 +39,19 @@ process.env.PDNS_API_KEY
 
 
 # Documentation
-**[Documentation](https://firstdorsal.eu/doc/powerdns-api/)**
+**[Documentation for THIS wrapper](https://firstdorsal.eu/doc/powerdns-api/)**
 
-# Need help?
-Feel free to contact me via xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu in english or german
+# Need help or missing a feature?
+Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu](mailto:xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu) in english or german
 
-## Automatic Let's Encrypt certificates via DNS
+## Automatic Let's Encrypt certificates via DNS with greenlock and PDNS
 [acme-dns-01-powerdns](https://www.npmjs.com/package/acme-dns-01-powerdns)
 
 ## PDNS WEB API Documentation
-https://doc.powerdns.com/authoritative/http-api/index.html
+[On the Web](https://doc.powerdns.com/authoritative/http-api/index.html)
+
+[And in full detail (Swagger)](https://raw.githubusercontent.com/PowerDNS/pdns/master/docs/http-api/swagger/authoritative-api-swagger.yaml)
+
 
 ## Modules
 
@@ -60,6 +63,8 @@ https://doc.powerdns.com/authoritative/http-api/index.html
 ## Typedefs
 
 <dl>
+<dt><a href="#Cryptokey">Cryptokey</a> : <code>object</code></dt>
+<dd></dd>
 <dt><a href="#Search">Search</a> : <code>object</code></dt>
 <dd></dd>
 <dt><a href="#Records">Records</a> : <code><a href="#Record">Array.&lt;Record&gt;</a></code></dt>
@@ -76,12 +81,15 @@ https://doc.powerdns.com/authoritative/http-api/index.html
     * [.PowerdnsClient](#module_powerdns-api.PowerdnsClient)
         * [new module.exports.PowerdnsClient(baseurl, apikey)](#new_module_powerdns-api.PowerdnsClient_new)
         * [.getZones()](#module_powerdns-api.PowerdnsClient+getZones) ⇒ <code>Array</code>
+        * [.createZone(zoneName, [kind])](#module_powerdns-api.PowerdnsClient+createZone) ⇒ <code>Object</code>
         * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
         * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
+        * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
         * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
         * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
         * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
         * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
+        * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
 
 <a name="module_powerdns-api.PowerdnsClient"></a>
 
@@ -93,12 +101,15 @@ Class representing the powerdns client
 * [.PowerdnsClient](#module_powerdns-api.PowerdnsClient)
     * [new module.exports.PowerdnsClient(baseurl, apikey)](#new_module_powerdns-api.PowerdnsClient_new)
     * [.getZones()](#module_powerdns-api.PowerdnsClient+getZones) ⇒ <code>Array</code>
+    * [.createZone(zoneName, [kind])](#module_powerdns-api.PowerdnsClient+createZone) ⇒ <code>Object</code>
     * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
     * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
+    * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
     * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
     * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
     * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
     * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
+    * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
 
 <a name="new_module_powerdns-api.PowerdnsClient_new"></a>
 
@@ -128,13 +139,30 @@ Create a powerdns client.
 <a name="module_powerdns-api.PowerdnsClient+getZones"></a>
 
 #### powerdnsClient.getZones() ⇒ <code>Array</code>
-Returns array of zones on pdns server.
+Returns array of all zones on pdns server.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>Array</code> - array of zones on the server  
 **Example**  
 ```js
 await pdns.getZones();
+```
+<a name="module_powerdns-api.PowerdnsClient+createZone"></a>
+
+#### powerdnsClient.createZone(zoneName, [kind]) ⇒ <code>Object</code>
+Creates zone/domain and returns its SOA record on success.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Object</code> - just the rrsets of the zone  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| zoneName | <code>string</code> |  | takes a domain name |
+| [kind] | <code>&#x27;Native&#x27;</code> \| <code>&#x27;Master&#x27;</code> \| <code>&#x27;Slave&#x27;</code> | <code>Native</code> | takes the kind of zone you want |
+
+**Example**  
+```js
+await pdns.createZone('example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+getZoneWithMeta"></a>
 
@@ -155,7 +183,7 @@ await pdns.getZoneWithMeta();
 <a name="module_powerdns-api.PowerdnsClient+getZone"></a>
 
 #### powerdnsClient.getZone(zoneName) ⇒ <code>object</code>
-Returns array with rrsets.
+Returns array with rrsets for zone.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>object</code> - just the rrsets of the zone  
@@ -167,6 +195,22 @@ Returns array with rrsets.
 **Example**  
 ```js
 await pdns.getZone('example.com');
+```
+<a name="module_powerdns-api.PowerdnsClient+deleteZone"></a>
+
+#### powerdnsClient.deleteZone(zoneName) ⇒ <code>boolean</code>
+Deletes the whole zone with all attached metadata and rrsets.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - true on success  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| zoneName | <code>string</code> | takes a domain name |
+
+**Example**  
+```js
+await pdns.deleteZone('example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+setRecords"></a>
 
@@ -249,6 +293,39 @@ await pdns.appendRecord({
            content: ['1.1.1.1','2.2.2.2']
        });
 ```
+<a name="module_powerdns-api.PowerdnsClient+createCryptokey"></a>
+
+#### powerdnsClient.createCryptokey(zoneName, [cryptokey], [returnPrivateKey]) ⇒ <code>Object</code>
+Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your own please read the original [documentation](https://doc.powerdns.com/authoritative/http-api/cryptokey.html) and put it in the Cryptokey parameter.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Object</code> - ob success the public key and info will be returned  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| zoneName | <code>string</code> |  | name of the zone/domain |
+| [cryptokey] | [<code>Cryptokey</code>](#Cryptokey) | <code>{keytype: &quot;ksk&quot;, active: true}</code> | a Cryptokey |
+| [returnPrivateKey] | <code>boolean</code> | <code>false</code> | setting to true returns the private key with the answer |
+
+**Example**  
+```js
+await pdns.createCryptokey("example.com");
+```
+<a name="Cryptokey"></a>
+
+## Cryptokey : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| keytype | <code>&#x27;ksk&#x27;</code> \| <code>&#x27;zsk&#x27;</code> \| <code>&#x27;csk&#x27;</code> | The type of the key possible values are |
+| active | <code>boolean</code> | Whether or not the key is in active use |
+| published | <code>boolean</code> | Whether or not the DNSKEY record is published in the zone |
+| dnskey | <code>string</code> | The DNSKEY record for this key |
+| privatekey | <code>string</code> | The private key in ISC format |
+| algorithm | <code>string</code> | The name of the algorithm of the key, should be a mnemonic |
+
 <a name="Search"></a>
 
 ## Search : <code>object</code>
@@ -259,7 +336,7 @@ await pdns.appendRecord({
 | --- | --- | --- | --- |
 | query | <code>string</code> |  | query to search for |
 | [max] | <code>number</code> | <code>10</code> | limits the ammount of returned values |
-| [object_type] | <code>string</code> | <code>&quot;record&quot;</code> | for what kind of pdns object to search |
+| [object_type] | <code>&#x27;all&#x27;</code> \| <code>&#x27;zone&#x27;</code> \| <code>&#x27;record&#x27;</code> \| <code>&#x27;comment&#x27;</code> | <code>record</code> | for what kind of pdns object to search |
 
 **Example**  
 ```js
