@@ -52,6 +52,10 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsa
 
 [And in full detail (Swagger)](https://raw.githubusercontent.com/PowerDNS/pdns/master/docs/http-api/swagger/authoritative-api-swagger.yaml)
 
+## Links
+[NPM](https://www.npmjs.com/package/@firstdorsal/powerdns-api)
+[Documentation](https://firstdorsal.eu/doc/powerdns-api/)
+[Code on Gitlab](https://git.firstdorsal.eu/firstdorsal/powerdns-api)
 
 ## Modules
 
