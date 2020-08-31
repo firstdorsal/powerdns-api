@@ -82,9 +82,6 @@ module.exports.PowerdnsClient = class {
         this.baseurl = baseurl;
         this.apikey = apikey;
     }
-
-
-
     /**
      * Takes domain name as string. Returns the domain name as string in absolute form with a . at the end. example.com -> example.com. and example.com. -> example.com.
      * @private
@@ -95,10 +92,33 @@ module.exports.PowerdnsClient = class {
         if (name[name.length - 1] !== '.') return name + '.';
         return name;
     }
+
     /**
-     * Returns array of all zones on pdns server.
+     * takes array of records and sorts its contents by name into multiple arrays
+     * @private
+     * @param {Array} records array of records
+     * @returns {Array} array of arrays with records with the same name
+     * */
+    sortRecordsByDomainName(records) {
+        const result = [];
+        for (let i = 0; i < records.length; i++) {
+            let p = false;
+            for (let j = 0; j < result.length; j++) {
+                if (records[i].name === result[j][0].name) {
+                    result[j].push(records[i]);
+                    p = true;
+                    break;
+                }
+
+            }
+            if (!p) result.push([records[i]]);
+        }
+        return result;
+    }
+    /**
+     * Returns array of all zones from this pdns server.
      * @async
-     * @returns {Array} array of zones on the server
+     * @returns {Array} array of zones
      * @example 
        await pdns.getZones();
      */
@@ -113,7 +133,6 @@ module.exports.PowerdnsClient = class {
             return res.json();
         });
     }
-
     /**
      * Creates zone/domain and returns its SOA record on success.
 
@@ -144,15 +163,13 @@ module.exports.PowerdnsClient = class {
             throw new Error(err.error.error);
         });
     }
-
-
     /**
      * Returns single zone with meta information. 
      * @async
      * @param {string} zoneName takes a domain name
      * @returns {object} the zone with meta information
      * @example 
-       await pdns.getZoneWithMeta();
+       await pdns.getZoneWithMeta('example.com');
      */
     getZoneWithMeta(zoneName) {
         zoneName = this.absoluteName(zoneName);
@@ -190,9 +207,6 @@ module.exports.PowerdnsClient = class {
             return null;
         });
     }
-
-
-
     /**
      * Deletes the whole zone with all attached metadata and rrsets.
      * @async
@@ -216,22 +230,20 @@ module.exports.PowerdnsClient = class {
             throw new Error(err.error.error);
         })
     }
-
     /**
-     * Takes records as array and sets them. If records exist it replaces them.
+     * Takes records for a SINGLE domain as array and sets them. If records exist it replaces them.
      * @async
      * @param {Records} records array containing the records
      * @returns {boolean} boolean indicating the success of the operation
      * @example 
-       await pdns.setRecords([{
+       await pdns.setHomogeneousRecords([{
            name: "example.com",
            type: "A",
            ttl: 300,
            content: ['1.1.1.1']
        }]);
      */
-
-    setRecords(records) {
+    setHomogeneousRecords(records) {
         if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
 
         const dname = this.absoluteName(records[0].name);
@@ -274,10 +286,6 @@ module.exports.PowerdnsClient = class {
             return false;
         });
     }
-
-
-
-
     /**
      * Takes records as array and deletes them.
      * @async
@@ -320,7 +328,6 @@ module.exports.PowerdnsClient = class {
             return false;
         });
     }
-
     /**
      * Takes Search object and searches for matching elements in the pdns server.
      * @async
@@ -377,18 +384,15 @@ module.exports.PowerdnsClient = class {
         }
         return await this.setRecords([record]);
     }
-
-
     /**
      * Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your own please read the original [documentation]{@link https://doc.powerdns.com/authoritative/http-api/cryptokey.html} and put it in the Cryptokey parameter.
      * @async
      * @param {string} zoneName name of the zone/domain 
      * @param {Cryptokey} [cryptokey={keytype: "ksk", active: true}] a Cryptokey
      * @param {boolean} [returnPrivateKey=false] setting to true returns the private key with the answer
-     * @returns {Object} ob success the public key and info will be returned
+     * @returns {Object} on success the public key and info will be returned
      * @example
         await pdns.createCryptokey("example.com");
-
      */
     createCryptokey(zoneName, cryptokey = {
         keytype: "ksk",
@@ -412,5 +416,154 @@ module.exports.PowerdnsClient = class {
             delete res.privatekey;
             return res;
         })
+    }
+    /**
+     * Takes records for single or mixed domains as array and sets them. If records exist it replaces them.
+     * @async
+     * @param {Records} records array containing the records
+     * @returns {boolean}  indicating the end of the operation
+     * @example 
+       await pdns.setRecords([{
+           name: "example.com",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1']
+       },{
+           name: "example.org",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1']
+       }]);
+     */
+    async setRecords(records) {
+        records = this.sortRecordsByDomainName(records);
+        let ir = [];
+        for (let i = 0; i < records.length; i++) {
+            ir.push(this.setHomogeneousRecords(records[i]))
+        }
+        await Promise.all(ir);
+        return true;
+    }
+    /**
+     * @async
+     * @param {String} find string to search for
+     * @param {String} replace string to replace the find string with
+     * @param {String} zone zone to search through
+     * @returns {Number} number of replaced entries
+     *
+     */
+    async replaceRecords(find, replace, zone) {
+        const toReplace = [];
+        const zoneSets = await this.getZone(zone)
+        if (zoneSets) {
+            for (let j = 0; j < zoneSets.length; j++) {
+                const content = [];
+                let foundOne = false;
+                for (let k = 0; k < zoneSets[j].records.length; k++) {
+                    if (zoneSets[j].records[k].content === find) {
+                        content.push(replace)
+                        foundOne = true;
+                    } else {
+                        content.push(zoneSets[j].records[k].content);
+                    }
+                }
+                if (foundOne) {
+                    toReplace.push({
+                        name: zoneSets[j].name,
+                        type: zoneSets[j].type,
+                        ttl: zoneSets[j].ttl,
+                        content,
+                    });
+                }
+            }
+        }
+        await this.setRecords(toReplace);
+        return toReplace.length
+    }
+
+
+    /**
+     * @async
+     * @param {String} find string to search for
+     * @param {String} replace string to replace the find string with
+     * @returns {Number} number of replaced entries
+     *
+     */
+    async replaceRecordsGlobal(find, replace) {
+        const allZones = await this.getZones();
+        const toReplace = [];
+        for (let i = 0; i < allZones.length; i++) {
+            const zoneSets = await this.getZone(allZones[i].name)
+            if (zoneSets) {
+                for (let j = 0; j < zoneSets.length; j++) {
+                    const content = [];
+                    let foundOne = false;
+                    for (let k = 0; k < zoneSets[j].records.length; k++) {
+                        if (zoneSets[j].records[k].content === find) {
+                            content.push(replace)
+                            foundOne = true;
+                        } else {
+                            content.push(zoneSets[j].records[k].content);
+                        }
+                    }
+                    if (foundOne) {
+                        toReplace.push({
+                            name: zoneSets[j].name,
+                            type: zoneSets[j].type,
+                            ttl: zoneSets[j].ttl,
+                            content,
+                        });
+                    }
+                }
+            }
+        }
+        await this.setRecords(toReplace);
+        return toReplace.length
+    }
+    /**
+     * search for records in a zone 
+     * @async
+     * @param {String} find string to search for
+     * @param {String} zone zone to search through
+     * @returns {Array} records containing the find string in the content field
+     *
+     */
+    async findRecords(find, zone) {
+        const res = [];
+        const zoneSets = await this.getZone(zone)
+        if (zoneSets) {
+            for (let j = 0; j < zoneSets.length; j++) {
+                for (let k = 0; k < zoneSets[j].records.length; k++) {
+                    if (zoneSets[j].records[k].content === find) {
+                        res.push(zoneSets[j]);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    /**
+     * search for records globally on the pdns server
+     * @async
+     * @param {String} find string to search for
+     * @returns {Array} records containing the find string in the content field
+     *
+     */
+    async findRecordsGlobal(find) {
+        const allZones = await this.getZones();
+        const res = [];
+        for (let i = 0; i < allZones.length; i++) {
+            const zoneSets = await this.getZone(allZones[i].name)
+            if (zoneSets) {
+                for (let j = 0; j < zoneSets.length; j++) {
+                    for (let k = 0; k < zoneSets[j].records.length; k++) {
+                        if (zoneSets[j].records[k].content === find) {
+                            res.push(zoneSets[j]);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
     }
 }
