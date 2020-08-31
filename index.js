@@ -480,8 +480,6 @@ module.exports.PowerdnsClient = class {
         await this.setRecords(toReplace);
         return toReplace.length
     }
-
-
     /**
      * @async
      * @param {String} find string to search for
