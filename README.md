@@ -91,11 +91,16 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsa
         * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
         * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
         * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
-        * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+        * [.setHomogeneousRecords(records)](#module_powerdns-api.PowerdnsClient+setHomogeneousRecords) ⇒ <code>boolean</code>
         * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
         * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
         * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
         * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
+        * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+        * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
+        * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
+        * [.findRecords(find, zone)](#module_powerdns-api.PowerdnsClient+findRecords) ⇒ <code>Array</code>
+        * [.findRecordsGlobal(find)](#module_powerdns-api.PowerdnsClient+findRecordsGlobal) ⇒ <code>Array</code>
 
 <a name="module_powerdns-api.PowerdnsClient"></a>
 
@@ -111,11 +116,16 @@ Class representing the powerdns client
     * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
     * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
     * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
-    * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+    * [.setHomogeneousRecords(records)](#module_powerdns-api.PowerdnsClient+setHomogeneousRecords) ⇒ <code>boolean</code>
     * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
     * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
     * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
     * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
+    * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+    * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
+    * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
+    * [.findRecords(find, zone)](#module_powerdns-api.PowerdnsClient+findRecords) ⇒ <code>Array</code>
+    * [.findRecordsGlobal(find)](#module_powerdns-api.PowerdnsClient+findRecordsGlobal) ⇒ <code>Array</code>
 
 <a name="new_module_powerdns-api.PowerdnsClient_new"></a>
 
@@ -145,10 +155,10 @@ Create a powerdns client.
 <a name="module_powerdns-api.PowerdnsClient+getZones"></a>
 
 #### powerdnsClient.getZones() ⇒ <code>Array</code>
-Returns array of all zones on pdns server.
+Returns array of all zones from this pdns server.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Array</code> - array of zones on the server  
+**Returns**: <code>Array</code> - array of zones  
 **Example**  
 ```js
 await pdns.getZones();
@@ -184,7 +194,7 @@ Returns single zone with meta information.
 
 **Example**  
 ```js
-await pdns.getZoneWithMeta();
+await pdns.getZoneWithMeta('example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+getZone"></a>
 
@@ -218,10 +228,10 @@ Deletes the whole zone with all attached metadata and rrsets.
 ```js
 await pdns.deleteZone('example.com');
 ```
-<a name="module_powerdns-api.PowerdnsClient+setRecords"></a>
+<a name="module_powerdns-api.PowerdnsClient+setHomogeneousRecords"></a>
 
-#### powerdnsClient.setRecords(records) ⇒ <code>boolean</code>
-Takes records as array and sets them. If records exist it replaces them.
+#### powerdnsClient.setHomogeneousRecords(records) ⇒ <code>boolean</code>
+Takes records for a SINGLE domain as array and sets them. If records exist it replaces them.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>boolean</code> - boolean indicating the success of the operation  
@@ -232,7 +242,7 @@ Takes records as array and sets them. If records exist it replaces them.
 
 **Example**  
 ```js
-await pdns.setRecords([{
+await pdns.setHomogeneousRecords([{
            name: "example.com",
            type: "A",
            ttl: 300,
@@ -305,7 +315,7 @@ await pdns.appendRecord({
 Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your own please read the original [documentation](https://doc.powerdns.com/authoritative/http-api/cryptokey.html) and put it in the Cryptokey parameter.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Object</code> - ob success the public key and info will be returned  
+**Returns**: <code>Object</code> - on success the public key and info will be returned  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -317,6 +327,80 @@ Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your ow
 ```js
 await pdns.createCryptokey("example.com");
 ```
+<a name="module_powerdns-api.PowerdnsClient+setRecords"></a>
+
+#### powerdnsClient.setRecords(records) ⇒ <code>boolean</code>
+Takes records for single or mixed domains as array and sets them. If records exist it replaces them.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - indicating the end of the operation  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| records | [<code>Records</code>](#Records) | array containing the records |
+
+**Example**  
+```js
+await pdns.setRecords([{
+           name: "example.com",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1']
+       },{
+           name: "example.org",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1']
+       }]);
+```
+<a name="module_powerdns-api.PowerdnsClient+replaceRecords"></a>
+
+#### powerdnsClient.replaceRecords(find, replace, zone) ⇒ <code>Number</code>
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Number</code> - number of replaced entries  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| find | <code>String</code> | string to search for |
+| replace | <code>String</code> | string to replace the find string with |
+| zone | <code>String</code> | zone to search through |
+
+<a name="module_powerdns-api.PowerdnsClient+replaceRecordsGlobal"></a>
+
+#### powerdnsClient.replaceRecordsGlobal(find, replace) ⇒ <code>Number</code>
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Number</code> - number of replaced entries  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| find | <code>String</code> | string to search for |
+| replace | <code>String</code> | string to replace the find string with |
+
+<a name="module_powerdns-api.PowerdnsClient+findRecords"></a>
+
+#### powerdnsClient.findRecords(find, zone) ⇒ <code>Array</code>
+search for records in a zone
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Array</code> - records containing the find string in the content field  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| find | <code>String</code> | string to search for |
+| zone | <code>String</code> | zone to search through |
+
+<a name="module_powerdns-api.PowerdnsClient+findRecordsGlobal"></a>
+
+#### powerdnsClient.findRecordsGlobal(find) ⇒ <code>Array</code>
+search for records globally on the pdns server
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Array</code> - records containing the find string in the content field  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| find | <code>String</code> | string to search for |
+
 <a name="Cryptokey"></a>
 
 ## Cryptokey : <code>object</code>

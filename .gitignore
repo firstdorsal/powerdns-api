@@ -3,3 +3,4 @@ node_modules
 test.js
 out
 .eslintrc.js
+generateDoc.sh
