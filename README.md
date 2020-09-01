@@ -382,7 +382,7 @@ await pdns.setRecords([{
 search for records in a zone
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Array</code> - records containing the find string in the content field  
+**Returns**: <code>Array</code> - records matching the find string in the content field  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -395,7 +395,7 @@ search for records in a zone
 search for records globally on the pdns server
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Array</code> - records containing the find string in the content field  
+**Returns**: <code>Array</code> - records matching the find string in the content field  
 
 | Param | Type | Description |
 | --- | --- | --- |

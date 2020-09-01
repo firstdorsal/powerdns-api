@@ -523,7 +523,7 @@ module.exports.PowerdnsClient = class {
      * @async
      * @param {String} find string to search for
      * @param {String} zone zone to search through
-     * @returns {Array} records containing the find string in the content field
+     * @returns {Array} records matching the find string in the content field
      *
      */
     async findRecords(find, zone) {
@@ -544,7 +544,7 @@ module.exports.PowerdnsClient = class {
      * search for records globally on the pdns server
      * @async
      * @param {String} find string to search for
-     * @returns {Array} records containing the find string in the content field
+     * @returns {Array} records matching the find string in the content field
      *
      */
     async findRecordsGlobal(find) {
