@@ -488,7 +488,7 @@ module.exports.PowerdnsClient = class {
      * @param {String} zone zone to search through
      * @returns {Number} number of replaced entries
      * @example
-      await pdns.findRecords('1.1.1.1','2.2.2.2','example.com');
+      await pdns.replaceRecords('1.1.1.1','2.2.2.2','example.com');
      */
     async replaceRecords(find, replace, zone) {
         const toReplace = [];
@@ -525,7 +525,7 @@ module.exports.PowerdnsClient = class {
      * @param {String} replace string to replace the find string with
      * @returns {Number} number of replaced entries
      * @example
-     await pdns.findRecords('1.1.1.1','2.2.2.2');
+     await pdns.replaceRecordsGlobal('1.1.1.1','2.2.2.2');
      */
     async replaceRecordsGlobal(find, replace) {
         const allZones = await this.getZones();
@@ -587,7 +587,7 @@ module.exports.PowerdnsClient = class {
      * @param {String} find string to search for
      * @returns {Array} records matching the find string in the content field
      * @example
-      await pdns.findRecords('1.1.1.1');
+      await pdns.findRecordsGlobal('1.1.1.1');
      */
     async findRecordsGlobal(find) {
         const allZones = await this.getZones();
