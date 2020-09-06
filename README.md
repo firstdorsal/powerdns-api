@@ -374,7 +374,7 @@ Searches for records in a zone by comparing the RECORDS field NOT the name field
 
 **Example**  
 ```js
-await pdns.findRecords('1.1.1.1','2.2.2.2','example.com');
+await pdns.replaceRecords('1.1.1.1','2.2.2.2','example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+replaceRecordsGlobal"></a>
 
@@ -391,7 +391,7 @@ Searches for records on the pdns server by comparing the RECORDS field NOT the n
 
 **Example**  
 ```js
-await pdns.findRecords('1.1.1.1','2.2.2.2');
+await pdns.replaceRecordsGlobal('1.1.1.1','2.2.2.2');
 ```
 <a name="module_powerdns-api.PowerdnsClient+findRecords"></a>
 
@@ -424,7 +424,7 @@ Searches for records on the pdns server by comparing the RECORDS field NOT the n
 
 **Example**  
 ```js
-await pdns.findRecords('1.1.1.1');
+await pdns.findRecordsGlobal('1.1.1.1');
 ```
 <a name="Cryptokey"></a>
 
