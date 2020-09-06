@@ -278,7 +278,7 @@ Takes Search object and searches for matching elements in the pdns server.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| search | [<code>Search</code>](#Search) | object with the query paramter |
+| search | [<code>Search</code>](#Search) | object with the query paramters |
 
 **Example**  
 ```js
@@ -298,7 +298,7 @@ Takes ONE record as object and appends it not replacing other records with the s
 
 | Param | Type | Description |
 | --- | --- | --- |
-| record | [<code>Record</code>](#Record) | array containing the records to be deleted |
+| record | [<code>Record</code>](#Record) | array containing the records to be appended |
 
 **Example**  
 ```js
@@ -351,11 +351,18 @@ await pdns.setRecords([{
            type: "A",
            ttl: 300,
            content: ['1.1.1.1']
+       },{
+           name: "example.me",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1','2.2.2.2.']
        }]);
 ```
 <a name="module_powerdns-api.PowerdnsClient+replaceRecords"></a>
 
 #### powerdnsClient.replaceRecords(find, replace, zone) ⇒ <code>Number</code>
+Searches for records in a zone by comparing the RECORDS field NOT the name field. Replaces the found records with the replace string.
+
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>Number</code> - number of replaced entries  
 
@@ -365,9 +372,15 @@ await pdns.setRecords([{
 | replace | <code>String</code> | string to replace the find string with |
 | zone | <code>String</code> | zone to search through |
 
+**Example**  
+```js
+await pdns.findRecords('1.1.1.1','2.2.2.2','example.com');
+```
 <a name="module_powerdns-api.PowerdnsClient+replaceRecordsGlobal"></a>
 
 #### powerdnsClient.replaceRecordsGlobal(find, replace) ⇒ <code>Number</code>
+Searches for records on the pdns server by comparing the RECORDS field NOT the name field. Replaces the found records with the replace string.
+
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>Number</code> - number of replaced entries  
 
@@ -376,10 +389,14 @@ await pdns.setRecords([{
 | find | <code>String</code> | string to search for |
 | replace | <code>String</code> | string to replace the find string with |
 
+**Example**  
+```js
+await pdns.findRecords('1.1.1.1','2.2.2.2');
+```
 <a name="module_powerdns-api.PowerdnsClient+findRecords"></a>
 
 #### powerdnsClient.findRecords(find, zone) ⇒ <code>Array</code>
-search for records in a zone
+Searches for records in a zone by comparing the RECORDS field NOT the name field
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>Array</code> - records matching the find string in the content field  
@@ -389,10 +406,14 @@ search for records in a zone
 | find | <code>String</code> | string to search for |
 | zone | <code>String</code> | zone to search through |
 
+**Example**  
+```js
+await pdns.findRecords('1.1.1.1', 'example.com');
+```
 <a name="module_powerdns-api.PowerdnsClient+findRecordsGlobal"></a>
 
 #### powerdnsClient.findRecordsGlobal(find) ⇒ <code>Array</code>
-search for records globally on the pdns server
+Searches for records on the pdns server by comparing the RECORDS field NOT the name field
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
 **Returns**: <code>Array</code> - records matching the find string in the content field  
@@ -401,6 +422,10 @@ search for records globally on the pdns server
 | --- | --- | --- |
 | find | <code>String</code> | string to search for |
 
+**Example**  
+```js
+await pdns.findRecords('1.1.1.1');
+```
 <a name="Cryptokey"></a>
 
 ## Cryptokey : <code>object</code>
@@ -456,12 +481,12 @@ search for records globally on the pdns server
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | key name of the record |
-| type | <code>string</code> | type of the record |
-| ttl | <code>number</code> | time to live of the record |
-| content | <code>Array</code> | value array with content of the record |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>string</code> |  | key name of the record |
+| [type] | <code>string</code> | <code>&quot;&#x27;A&#x27;&quot;</code> | type of the record |
+| [ttl] | <code>number</code> | <code>3600</code> | time to live of the record |
+| content | <code>Array</code> |  | value array with content of the record |
 
 **Example**  
 ```js
