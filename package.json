@@ -1,14 +1,12 @@
 {
   "name": "@firstdorsal/powerdns-api",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Nodejs PowerDNS API.",
   "main": "index.js",
   "author": "Paul Colin Hennig",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.0",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "node-fetch": "^2.6.0"
   },
   "scripts": {
     "makedoc": "./generateDoc.sh"
