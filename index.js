@@ -1,8 +1,5 @@
 'use strict';
 const f = require("node-fetch")
-const r = require("request-promise");
-
-
 
 /** 
  * @typedef Cryptokey
@@ -146,21 +143,27 @@ module.exports.PowerdnsClient = class {
     createZone(zoneName, kind = 'Native') {
         const dname = this.absoluteName(zoneName);
         const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
-        return r(`${this.baseurl}/zones`, {
-            method: 'post',
+        return f(`${this.baseurl}/zones`, {
+            method: 'POST',
             headers: {
-                'X-Api-Key': this.apikey
+                'X-Api-Key': this.apikey,
+                "Content-Type": "application/json"
             },
-            body: {
+            body: JSON.stringify({
                 name: zoneNameSan + '.',
                 kind
-            },
-            json: true
-        }).then((res) => {
-            if (!res.rrsets) return false;
-            return res.rrsets[0]
+            })
+        }).then(async (res) => {
+            let j = await res.text().catch();
+            try {
+                j = JSON.parse(j);
+            } catch (err) {
+                throw j;
+            }
+            if (!j.rrsets) return false;
+            return j.rrsets[0]
         }).catch((err) => {
-            throw new Error(err.error.error);
+            throw new Error(err);
         });
     }
     /**
@@ -218,16 +221,25 @@ module.exports.PowerdnsClient = class {
     deleteZone(zoneName) {
         const dname = this.absoluteName(zoneName);
         const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
-        return r(this.baseurl + '/zones/' + zoneNameSan, {
+        return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'DELETE',
             headers: {
                 'X-Api-Key': this.apikey
             },
             json: true
-        }).then((res) => {
-            if (res === undefined) return true;
+        }).then(async (res) => {
+            let j = await res.text().catch();
+            if (j) {
+                try {
+                    j = JSON.parse(j);
+                } catch (err) {
+                    throw j;
+                }
+            }
+            if (j === undefined || j.length === 0) return true;
+            return false;
         }).catch((err) => {
-            throw new Error(err.error.error);
+            throw err;
         })
     }
     /**
@@ -268,22 +280,28 @@ module.exports.PowerdnsClient = class {
                 records: recordsOut
             });
         }
-        return r(this.baseurl + '/zones/' + zoneName, {
+        return f(this.baseurl + '/zones/' + zoneName, {
             method: 'PATCH',
             headers: {
                 'X-Api-Key': this.apikey
             },
-            body: {
+            body: JSON.stringify({
                 rrsets
-            },
-            json: true
-        }).then((res) => {
-            if (res === undefined) return true;
+            })
+        }).then(async (res) => {
+            let j = await res.text().catch();
+            if (j) {
+                try {
+                    j = JSON.parse(j);
+                } catch (err) {
+                    throw j;
+                }
+            }
+            if (j === undefined || j.length === 0) return true;
             return false;
 
         }).catch((err) => {
-            console.error(err);
-            return false;
+            throw err;
         });
     }
     /**
@@ -311,21 +329,27 @@ module.exports.PowerdnsClient = class {
             });
         }
 
-        return r(this.baseurl + '/zones/' + zoneName, {
+        return f(this.baseurl + '/zones/' + zoneName, {
             method: 'PATCH',
             headers: {
                 'X-Api-Key': this.apikey
             },
-            body: {
+            body: JSON.stringify({
                 rrsets
-            },
-            json: true
-        }).then((res) => {
-            if (res === undefined) return true;
+            })
+        }).then(async (res) => {
+            let j = await res.text().catch();
+            if (j) {
+                try {
+                    j = JSON.parse(j);
+                } catch (err) {
+                    throw j;
+                }
+            }
+            if (j === undefined || j.length === 0) return true;
             return false;
         }).catch((err) => {
-            console.error(err);
-            return false;
+            throw err;
         });
     }
     /**
@@ -401,20 +425,26 @@ module.exports.PowerdnsClient = class {
         if (!zoneName) throw new Error('Missing zone/domain name');
         if (!cryptokey.keytype) throw new Error('Missing keytype');
 
-        const body = cryptokey;
         const dname = this.absoluteName(zoneName);
         const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
-        return r(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
+        return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
             method: 'POST',
             headers: {
                 'X-Api-Key': this.apikey
             },
-            body,
-            json: true
-        }).then((res) => {
-            if (returnPrivateKey) return res;
-            delete res.privatekey;
-            return res;
+            body: JSON.stringify(cryptokey)
+        }).then(async (res) => {
+            let j = await res.text().catch();
+            if (j) {
+                try {
+                    j = JSON.parse(j);
+                } catch (err) {
+                    throw j;
+                }
+            }
+            if (returnPrivateKey) return j;
+            delete j.privatekey;
+            return j;
         })
     }
     /**
