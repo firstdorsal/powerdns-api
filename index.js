@@ -44,8 +44,8 @@ const f = require("node-fetch")
  * @typedef Record
  * @type {object}
  * @prop {string} name key name of the record
- * @prop {string} type type of the record
- * @prop {number} ttl time to live of the record
+ * @prop {string} [type='A'] type of the record
+ * @prop {number} [ttl=3600] time to live of the record
  * @prop {Array} content value array with content of the record
  * @example
  * {name: "example.com", type: "A", ttl: 300, content: ['1.1.1.1', '8.8.8.8']}
@@ -264,18 +264,19 @@ module.exports.PowerdnsClient = class {
         for (let i = 0; i < records.length; i++) {
             let recordsOut = [];
             for (let j = 0; j < records[i].content.length; j++) {
+
                 recordsOut.push({
                     "content": records[i].content[j],
                     "disabled": false,
-                    "ttl": records[i].ttl,
+                    "ttl": typeof (records[i].ttl) == 'undefined' ? 3600 : records[i].ttl,
                     "name": this.absoluteName(records[i].name),
-                    "type": records[i].type
+                    "type": typeof (records[i].type) == 'undefined' ? 'A' : records[i].type
                 });
             }
             rrsets.push({
                 "name": this.absoluteName(records[i].name),
-                "type": records[i].type,
-                "ttl": records[i].ttl,
+                "type": typeof (records[i].type) == 'undefined' ? 'A' : records[i].type,
+                "ttl": typeof (records[i].ttl) == 'undefined' ? 3600 : records[i].ttl,
                 "changetype": "REPLACE",
                 records: recordsOut
             });
@@ -355,7 +356,7 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes Search object and searches for matching elements in the pdns server.
      * @async
-     * @param {Search} search object with the query paramter
+     * @param {Search} search object with the query paramters
      * @returns {object} search results
      * @example
        await pdns.search({
@@ -387,7 +388,7 @@ module.exports.PowerdnsClient = class {
     /**
      * Takes ONE record as object and appends it not replacing other records with the same name.
      * @async
-     * @param {Record} record array containing the records to be deleted
+     * @param {Record} record array containing the records to be appended
      * @returns {boolean} boolean indicating the success of the operation
      * @example
        await pdns.appendRecord({
@@ -463,6 +464,11 @@ module.exports.PowerdnsClient = class {
            type: "A",
            ttl: 300,
            content: ['1.1.1.1']
+       },{
+           name: "example.me",
+           type: "A",
+           ttl: 300,
+           content: ['1.1.1.1','2.2.2.2.']
        }]);
      */
     async setRecords(records) {
@@ -475,12 +481,14 @@ module.exports.PowerdnsClient = class {
         return true;
     }
     /**
+     * Searches for records in a zone by comparing the RECORDS field NOT the name field. Replaces the found records with the replace string.
      * @async
      * @param {String} find string to search for
      * @param {String} replace string to replace the find string with
      * @param {String} zone zone to search through
      * @returns {Number} number of replaced entries
-     *
+     * @example
+      await pdns.findRecords('1.1.1.1','2.2.2.2','example.com');
      */
     async replaceRecords(find, replace, zone) {
         const toReplace = [];
@@ -511,11 +519,13 @@ module.exports.PowerdnsClient = class {
         return toReplace.length
     }
     /**
+     * Searches for records on the pdns server by comparing the RECORDS field NOT the name field. Replaces the found records with the replace string.
      * @async
      * @param {String} find string to search for
      * @param {String} replace string to replace the find string with
      * @returns {Number} number of replaced entries
-     *
+     * @example
+     await pdns.findRecords('1.1.1.1','2.2.2.2');
      */
     async replaceRecordsGlobal(find, replace) {
         const allZones = await this.getZones();
@@ -549,12 +559,13 @@ module.exports.PowerdnsClient = class {
         return toReplace.length
     }
     /**
-     * search for records in a zone 
+     * Searches for records in a zone by comparing the RECORDS field NOT the name field
      * @async
      * @param {String} find string to search for
      * @param {String} zone zone to search through
      * @returns {Array} records matching the find string in the content field
-     *
+     * @example
+            await pdns.findRecords('1.1.1.1', 'example.com');
      */
     async findRecords(find, zone) {
         const res = [];
@@ -571,11 +582,12 @@ module.exports.PowerdnsClient = class {
         return res;
     }
     /**
-     * search for records globally on the pdns server
+     * Searches for records on the pdns server by comparing the RECORDS field NOT the name field
      * @async
      * @param {String} find string to search for
      * @returns {Array} records matching the find string in the content field
-     *
+     * @example
+      await pdns.findRecords('1.1.1.1');
      */
     async findRecordsGlobal(find) {
         const allZones = await this.getZones();
