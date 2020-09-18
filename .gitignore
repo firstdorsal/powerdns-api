@@ -5,3 +5,4 @@ out
 .eslintrc.js
 generateDoc.sh
 testrun.js
+.directory
