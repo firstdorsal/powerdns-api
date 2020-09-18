@@ -142,7 +142,7 @@ module.exports.PowerdnsClient = class {
      */
     createZone(zoneName, kind = 'Native') {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
         return f(`${this.baseurl}/zones`, {
             method: 'POST',
             headers: {
@@ -196,7 +196,7 @@ module.exports.PowerdnsClient = class {
      */
     getZone(zoneName) {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
         return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'GET',
             headers: {
@@ -220,7 +220,7 @@ module.exports.PowerdnsClient = class {
      */
     deleteZone(zoneName) {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
         return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'DELETE',
             headers: {
@@ -259,7 +259,7 @@ module.exports.PowerdnsClient = class {
         if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
 
         const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
             let recordsOut = [];
@@ -319,7 +319,7 @@ module.exports.PowerdnsClient = class {
     deleteRecords(records) {
         if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
         const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
 
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
@@ -427,7 +427,7 @@ module.exports.PowerdnsClient = class {
         if (!cryptokey.keytype) throw new Error('Missing keytype');
 
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Za-z0-9]*\.[A-Za-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
         return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
             method: 'POST',
             headers: {
