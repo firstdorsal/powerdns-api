@@ -42,7 +42,7 @@ process.env.PDNS_API_KEY
 **[Documentation for THIS wrapper](https://firstdorsal.eu/doc/powerdns-api/)**
 
 # Need help or missing a feature?
-Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu](mailto:xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsal.eu) in english or german
+Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mailto:xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy) in english or german
 
 ## Automatic Let's Encrypt certificates via DNS with greenlock and PDNS
 [acme-dns-01-powerdns](https://www.npmjs.com/package/acme-dns-01-powerdns)
@@ -57,5 +57,5 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@firstdorsa
 
 [Documentation](https://firstdorsal.eu/doc/powerdns-api/)
 
-[Code on Gitlab](https://git.firstdorsal.eu/firstdorsal/powerdns-api)
+[Code](https://git.y.gy/firstdorsal/powerdns-api)
 

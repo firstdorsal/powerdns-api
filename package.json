@@ -1,19 +1,21 @@
 {
   "name": "@firstdorsal/powerdns-api",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Nodejs PowerDNS API.",
   "main": "index.js",
   "author": "Paul Colin Hennig",
   "license": "MIT",
   "dependencies": {
+    "docdash-orange": "^1.0.0",
     "node-fetch": "^2.6.0"
   },
   "scripts": {
-    "makedoc": "./generateDoc.sh"
+    "makedoc-offline": "./generateDoc.sh",
+    "makedoc": "cat README_basic.md > README.md; jsdoc2md index.js >> README.md; jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md"
   },
   "repository": {
     "type": "git",
-    "url": "http://git.firstdorsal.eu/firstdorsal/powerdns-api.git"
+    "url": "http://git.y.gy/firstdorsal/powerdns-api.git"
   },
   "homepage": "https://firstdorsal.eu/doc/powerdns-api/",
   "keywords": [
