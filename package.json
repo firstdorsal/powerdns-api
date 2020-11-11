@@ -8,9 +8,6 @@
   "dependencies": {
     "node-fetch": "^2.6.0"
   },
-  "scripts": {
-    "makedoc-offline": "./generateDoc.sh"
-  },
   "repository": {
     "type": "git",
     "url": "http://git.y.gy/firstdorsal/powerdns-api.git"
