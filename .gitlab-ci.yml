@@ -10,14 +10,13 @@ makedoc:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - echo "Host git.y.gy \n Port 30022" > ~/.ssh/config
-    - cat ~/.ssh/config
     - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
+    - git remote add origin git@git.y.gy:$CI_PROJECT_PATH
     - git config --global user.email "gitlab-ci@git.y.gy"
     - git config --global user.name "gitlab-ci"
     - git commit README.md -m "🤖 makedoc [skip ci]"
