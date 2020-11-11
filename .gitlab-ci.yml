@@ -16,6 +16,8 @@ makedoc:
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
+    - git config --global user.email "gitlab-ci@git.y.gy"
+    - git config --global user.name "gitlab-ci"
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push
 #publish:
