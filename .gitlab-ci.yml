@@ -16,11 +16,10 @@ makedoc:
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
-    - export CI_PUSH_REPO=`echo $CI_BUILD_REPO | perl -pe 's#.*@(.+?(\:\d+)?)/#git@\1:#'`
-    - echo $CI_PUSH_REPO
     - git config --global user.email "gitlab-ci@git.y.gy"
     - git config --global user.name "gitlab-ci"
     - git commit README.md -m "🤖 makedoc [skip ci]"
+    - git remote remove origin
     - git push -u origin master
 #publish:
 #  stage: publish
