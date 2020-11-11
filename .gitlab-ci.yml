@@ -26,7 +26,7 @@ makedoc:
     - git config --global user.email "runner@$CI_SERVER_HOST"
     - git config --global user.name "runner"
     - git remote remove origin
-    - git remote add origin ssh://git@git.y.gy:30022/firstdorsal/$CI_PROJECT_NAME.git
+    - git remote add origin ssh://git@git.y.gy/firstdorsal/$CI_PROJECT_NAME.git
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push --set-upstream origin HEAD:master
 #publish:
