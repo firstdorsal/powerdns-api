@@ -28,7 +28,7 @@ makedoc:
     - git remote remove origin
     - git remote add origin ssh://git@git.y.gy/firstdorsal/$CI_PROJECT_NAME.git
     - git commit README.md -m "🤖 makedoc [skip ci]"
-    - git push --set-upstream origin master
+    - git push -f --set-upstream origin master
 #publish:
 #  stage: publish
 #  script:
