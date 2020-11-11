@@ -9,8 +9,7 @@
     "node-fetch": "^2.6.0"
   },
   "scripts": {
-    "makedoc-offline": "./generateDoc.sh",
-    "makedoc": "cat README_basic.md > README.md; jsdoc2md index.js >> README.md; jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md"
+    "makedoc-offline": "./generateDoc.sh"
   },
   "repository": {
     "type": "git",
