@@ -5,14 +5,15 @@ npm i @firstdorsal/powerdns-api
 # Usage
 ```js
 (async () => {
+    //get enviroment variables from the .env file
     require('dotenv').config();
-
+    //import the module
     const {
         PowerdnsClient
     } = require('@firstdorsal/powerdns-api');
-
+    //create a powerdns client object 
     const pdns = new PowerdnsClient(process.env.PDNS_API_ENDPOINT, process.env.PDNS_API_KEY);
-
+    //use a function and return the results to console
     console.log(await pdns.getZone('example.com'));
 })();
 
