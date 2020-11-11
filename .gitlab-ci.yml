@@ -10,12 +10,12 @@ makedoc:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H 'Git_Domain' >> ~/.ssh/known_hosts
+    - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
   script:
     - npm install
     - cat README_basic.md > README.md
-    - jsdoc2md index.js >> README.md
-    - jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
+    - node_modules/.bin/jsdoc2md index.js >> README.md
+    - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push
 #publish:
