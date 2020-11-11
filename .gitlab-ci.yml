@@ -12,7 +12,7 @@ makedoc:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
   script:
-    - npm install
+    - npm install docdash-orange jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
