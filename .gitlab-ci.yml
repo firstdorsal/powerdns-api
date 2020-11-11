@@ -2,7 +2,7 @@ image: node:latest
 
 stages:
   - makedoc
-#  - publish
+  - publish
 
 makedoc:
   stage: makedoc
@@ -14,6 +14,7 @@ makedoc:
     - git config --global user.email "runner@$CI_SERVER_HOST"
     - git config --global user.name "runner"
     - git remote remove origin
+<<<<<<< HEAD
     - git remote add origin https://git.y.gy/firstdorsal/$CI_PROJECT_NAME
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push --set-upstream origin HEAD:master
@@ -22,3 +23,13 @@ makedoc:
 #  script:
 #    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
 #    - npm publish
+=======
+    - git remote add origin https://runner:${RUNNER_PASSWORD}@git.y.gy/firstdorsal/$CI_PROJECT_NAME
+    - git commit README.md -m "🤖 makedoc [skip ci]" || true
+    - git push --set-upstream origin HEAD:master || true
+publish:
+  stage: publish
+  script:
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish
+>>>>>>> b1a911e133f8b4640faa0b717bf275a2c3b8267c
