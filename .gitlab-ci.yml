@@ -11,6 +11,7 @@ makedoc:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo "Host git.y.gy \n Port 30022" > ~/.ssh/config
+    - cat ~/.ssh/config
     - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
