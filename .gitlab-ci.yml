@@ -6,18 +6,6 @@ stages:
 
 makedoc:
   stage: makedoc
-  before_script:
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/privkey
-    - chmod 600 ~/.ssh/privkey
-    - |
-      echo "Host git.y.gy
-          Port 30022
-          Preferredauthentications publickey
-          IdentityFile ~/.ssh/privkey
-      " > ~/.ssh/config
-    - ssh-keyscan -p "30022" -H 'git.y.gy' >> ~/.ssh/known_hosts
-
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
@@ -26,7 +14,7 @@ makedoc:
     - git config --global user.email "runner@$CI_SERVER_HOST"
     - git config --global user.name "runner"
     - git remote remove origin
-    - git remote add origin ssh://git@git.y.gy:30022/firstdorsal/$CI_PROJECT_NAME.git
+    - git remote add origin https://git.y.gy/firstdorsal/$CI_PROJECT_NAME.git
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push --set-upstream origin HEAD:master
 #publish:
