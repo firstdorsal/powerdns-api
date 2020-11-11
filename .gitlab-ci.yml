@@ -17,8 +17,8 @@ makedoc:
     - git remote add origin https://runner:${RUNNER_PASSWORD}@git.y.gy/firstdorsal/$CI_PROJECT_NAME
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push --set-upstream origin HEAD:master
-#publish:
-#  stage: publish
-#  script:
-#    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
-#    - npm publish
+publish:
+  stage: publish
+  script:
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish
