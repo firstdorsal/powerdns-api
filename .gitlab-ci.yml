@@ -8,9 +8,15 @@ makedoc:
   stage: makedoc
   before_script:
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/privkey
+    - chmod 600 ~/.ssh/privkey
     - ssh-keyscan -p '30022' -H 'git.y.gy' >> ~/.ssh/known_hosts
+    - |
+      echo "Host git.y.gy
+          Port 30022
+          Preferredauthentications publickey
+          IdentityFile ~/.ssh/privkey
+      " > ~/.ssh/config
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
