@@ -18,6 +18,8 @@ makedoc:
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
     - git config --global user.email "runner@git.y.gy"
     - git config --global user.name "runner"
+    - git remote remove origin
+    - git remote add origin git@git.y.gy:firstdorsal/powerdns-api.git
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push -u origin master
 #publish:
