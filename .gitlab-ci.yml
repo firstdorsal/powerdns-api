@@ -16,7 +16,7 @@ makedoc:
           Preferredauthentications publickey
           IdentityFile ~/.ssh/privkey
       " > ~/.ssh/config
-    - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
+    - ssh-keyscan -p "30022" -H 'git.y.gy' >> ~/.ssh/known_hosts
 
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
