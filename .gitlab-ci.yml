@@ -1,17 +1,16 @@
 image: node:latest
 
-before_script:
-  - mkdir -p ~/.ssh
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - ssh-keyscan -H 'Git_Domain' >> ~/.ssh/known_hosts
-
 stages:
   - makedoc
 #  - publish
 
 makedoc:
   stage: makedoc
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H 'Git_Domain' >> ~/.ssh/known_hosts
   script:
     - npm install
     - cat README_basic.md > README.md
@@ -19,9 +18,8 @@ makedoc:
     - jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
     - git commit README.md -m "🤖 makedoc [skip ci]"
     - git push
-
-publish:
-  stage: publish
-  script:
-    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
-    - npm publish
+#publish:
+#  stage: publish
+#  script:
+#    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
+#    - npm publish
