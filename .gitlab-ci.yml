@@ -15,8 +15,8 @@ makedoc:
     - git config --global user.name "runner"
     - git remote remove origin
     - git remote add origin https://runner:${RUNNER_PASSWORD}@git.y.gy/firstdorsal/$CI_PROJECT_NAME
-    - git commit README.md -m "🤖 makedoc [skip ci]"
-    - git push --set-upstream origin HEAD:master
+    - git commit README.md -m "🤖 makedoc [skip ci]" || true
+    - git push --set-upstream origin HEAD:master || true
 publish:
   stage: publish
   script:
