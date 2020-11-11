@@ -39,7 +39,7 @@ process.env.PDNS_API_KEY
 
 
 # Documentation
-**[Documentation for THIS wrapper](https://firstdorsal.eu/doc/powerdns-api/)**
+**[Here](https://firstdorsal.eu/doc/powerdns-api/)**
 
 # Need help or missing a feature?
 Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mailto:xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy) in english or german
