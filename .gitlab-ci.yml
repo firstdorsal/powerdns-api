@@ -20,5 +20,8 @@ makedoc:
 publish:
   stage: publish
   script:
+    - npm install jsdoc jsdoc-to-markdown
+    - cat README_basic.md > README.md
+    - node_modules/.bin/jsdoc2md index.js >> README.md
     - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
     - npm publish
