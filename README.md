@@ -57,7 +57,7 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mail
 
 [Documentation](https://firstdorsal.eu/doc/powerdns-api/)
 
-[Code on Gitlab](https://git.y.gy/firstdorsal/powerdns-api)
+[Code](https://git.y.gy/firstdorsal/powerdns-api)
 
 ## Modules
 
