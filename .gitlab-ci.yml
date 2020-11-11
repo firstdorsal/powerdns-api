@@ -10,7 +10,7 @@ makedoc:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H 'git.y.gy' >> ~/.ssh/known_hosts
+    - ssh-keyscan -H 'git.y.gy:30022' >> ~/.ssh/known_hosts
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
