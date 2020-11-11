@@ -11,12 +11,12 @@ makedoc:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/privkey
     - chmod 600 ~/.ssh/privkey
     - |
-      echo "Host git.y.gy
+      echo "Host gitlab
           Port 30022
           Preferredauthentications publickey
           IdentityFile ~/.ssh/privkey
       " > ~/.ssh/config
-    - ssh-keyscan -p "30022" -H 'git.y.gy' >> ~/.ssh/known_hosts
+    - ssh-keyscan -p "30022" -H 'gitlab' >> ~/.ssh/known_hosts
 
   script:
     - npm install docdash-orange jsdoc jsdoc-to-markdown
