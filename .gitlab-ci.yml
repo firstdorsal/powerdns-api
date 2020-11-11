@@ -19,7 +19,7 @@ makedoc:
     - git config --global user.email "gitlab-ci@git.y.gy"
     - git config --global user.name "gitlab-ci"
     - git commit README.md -m "🤖 makedoc [skip ci]"
-    - git push
+    - git push --set-upstream origin master
 #publish:
 #  stage: publish
 #  script:
