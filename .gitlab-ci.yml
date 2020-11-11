@@ -2,7 +2,7 @@ image: node:latest
 
 stages:
   - makedoc
-#  - publish
+  - publish
 
 makedoc:
   stage: makedoc
