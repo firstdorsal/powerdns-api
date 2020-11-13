@@ -40,7 +40,7 @@ process.env.PDNS_API_KEY
 
 
 # Documentation
-**[Here](https://firstdorsal.eu/doc/powerdns-api/)**
+**[Here](https://doc.y.gy/powerdns-api/)**
 
 # Need help or missing a feature?
 Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mailto:xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy) in english or german
@@ -56,7 +56,7 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mail
 ## Links
 [NPM](https://www.npmjs.com/package/@firstdorsal/powerdns-api)
 
-[Documentation](https://firstdorsal.eu/doc/powerdns-api/)
+[Documentation](https://doc.y.gy/powerdns-api/)
 
 [Code](https://git.y.gy/firstdorsal/powerdns-api)
 
