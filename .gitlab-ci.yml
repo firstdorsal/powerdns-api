@@ -7,21 +7,29 @@ stages:
 makedoc:
   stage: makedoc
   script:
+    #install
     - npm install docdash-orange jsdoc jsdoc-to-markdown
+    # generate doc
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
+    # upload html doc
+    - cd out && tar -cf ../archive.tar . && cd ..
+    - curl -F file=@archive.tar "https://doc.y.gy/?project-name=$CI_PROJECT_NAME&token=$DOC_HOST_TOKEN" ; echo
+    # commit generated readme back to repo
     - git config --global user.email "runner@$CI_SERVER_HOST"
     - git config --global user.name "runner"
     - git remote remove origin
-    - git remote add origin https://runner:${RUNNER_PASSWORD}@git.y.gy/firstdorsal/$CI_PROJECT_NAME
+    - git remote add origin https://runner:${RUNNER_PASSWORD}@$CI_SERVER_HOST/$CI_PROJECT_PATH
     - git commit README.md -m "🤖 makedoc [skip ci]" || true
     - git push --set-upstream origin HEAD:master || true
 publish:
   stage: publish
   script:
+    #generate readme doc
     - npm install jsdoc jsdoc-to-markdown
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
+    #publish to npm
     - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
     - npm publish
