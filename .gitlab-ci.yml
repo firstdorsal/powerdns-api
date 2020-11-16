@@ -27,7 +27,7 @@ publish:
   stage: publish
   script:
     #generate readme doc
-    - npm install jsdoc jsdoc-to-markdown
+    - npm install jsdoc jsdoc-to-markdown --save-dev
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     #publish to npm

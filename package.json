@@ -1,6 +1,6 @@
 {
   "name": "@firstdorsal/powerdns-api",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "Nodejs PowerDNS API Client.",
   "main": "index.js",
   "author": "Paul Colin Hennig",
