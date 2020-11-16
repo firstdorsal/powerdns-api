@@ -1,12 +1,12 @@
 {
   "name": "@firstdorsal/powerdns-api",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "description": "Nodejs PowerDNS API Client.",
   "main": "index.js",
   "author": "Paul Colin Hennig",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "repository": {
     "type": "git",
