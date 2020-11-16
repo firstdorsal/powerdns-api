@@ -228,14 +228,8 @@ module.exports.PowerdnsClient = class {
             },
             json: true
         }).then(async (res) => {
-            let j = await res.text().catch();
-            if (j) {
-                try {
-                    j = JSON.parse(j);
-                } catch (err) {
-                    throw j;
-                }
-            }
+            let j = await res.text();
+
             if (j === undefined || j.length === 0) return true;
             return false;
         }).catch((err) => {
@@ -622,9 +616,6 @@ module.exports.PowerdnsClient = class {
         
     })
      */
-
-
-
     async createAndSetupZone(zone) {
         await this.createZone(zone.domain);
         await this.setRecords([{
@@ -638,7 +629,7 @@ module.exports.PowerdnsClient = class {
             ttl: 3600,
             content: zone.nameserver.map(e => this.absoluteName(e))
         }]);
-        await this.createCryptokey(zone.domain);
+        return await this.createCryptokey(zone.domain);
 
     }
 }
