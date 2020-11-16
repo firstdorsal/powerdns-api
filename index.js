@@ -611,7 +611,7 @@ module.exports.PowerdnsClient = class {
      * @example
       await pdns.createAndSetupZone({
              domain: 'example.com',
-             nameserver: ['ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain'],
+             nameserver: ['ns1.paulisttoll.somedomain', 'ns2.paulisttoll.somedomain', 'ns3.paulisttoll.somedomain'],
              hostmasterEmail:'hostmaster@paulisttoll.somedomain',
         
     })
