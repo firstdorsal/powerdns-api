@@ -622,15 +622,15 @@ module.exports.PowerdnsClient = class {
             if (e.toString().includes('Conflict')) console.log('domain already exists: skipping creation')
         });
         await this.setRecords([{
-            name: zone.domain,
+            name: zone.domain.match(/\..*$/)[0].substr(1),
             type: "SOA",
             ttl: 3600,
             content: [`${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace('@','.')}. 2020111501 10800 3600 604800 3600`]
         }, {
-            name: zone.domain,
+            name: zone.domain.match(/\..*$/)[0].substr(1),
             type: "NS",
             ttl: 3600,
-            content: zone.nameserver.map(e => this.absoluteName(e.match(/\..*$/)[0].substr(1)))
+            content: zone.nameserver.map(e => this.absoluteName(e))
         }]).catch(e => {
             console.log(e)
         });
