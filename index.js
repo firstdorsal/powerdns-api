@@ -617,7 +617,9 @@ module.exports.PowerdnsClient = class {
     })
      */
     async createAndSetupZone(zone) {
-        await this.createZone(zone.domain);
+        await this.createZone(zone.domain).catch(e => {
+            if (e.toString().includes('Conflict')) console.log('domain already exists: skipping creation')
+        });
         await this.setRecords([{
             name: "example.com",
             type: "SOA",
