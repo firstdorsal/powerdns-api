@@ -632,7 +632,7 @@ module.exports.PowerdnsClient = class {
             ttl: 3600,
             content: zone.nameserver.map(e => this.absoluteName(e))
         }]).catch(e => {
-            console.log(e)
+            console.log(e.match(/\..*$/)[0].substr(1))
         });
         return await this.createCryptokey(zone.domain);
 
