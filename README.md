@@ -1,7 +1,9 @@
-[![pipeline status](https://git.y.gy/firstdorsal/powerdns-api/badges/master/pipeline.svg)](https://git.y.gy/firstdorsal/powerdns-api/-/commits/master)
-![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@firstdorsal/powerdns-api)
+
 ![npm](https://img.shields.io/npm/dm/@firstdorsal/powerdns-api)
 ![NPM](https://img.shields.io/npm/l/@firstdorsal/powerdns-api)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@firstdorsal/powerdns-api)
+[![Website](https://img.shields.io/website?down_color=red&down_message=offline&label=documentation&up_color=success&up_message=online&url=https%3A%2F%2Fdoc.y.gy%2Fpowerdns-api)](https://doc.y.gy/powerdns-api/)
+
 
 # Install
 ```
