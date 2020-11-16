@@ -291,6 +291,8 @@ module.exports.PowerdnsClient = class {
             })
         }).then(async (res) => {
             let j = await res.text().catch();
+            if (j.includes('error')) console.log(j);
+
             if (j) {
                 try {
                     j = JSON.parse(j);
@@ -452,7 +454,7 @@ module.exports.PowerdnsClient = class {
      * Takes records for single or mixed domains as array and sets them. If records exist it replaces them.
      * @async
      * @param {Records} records array containing the records
-     * @returns {boolean}  indicating the end of the operation
+     * @returns {Array}  array of booleans indicating the success of each entry
      * @example 
        await pdns.setRecords([{
            name: "example.com",
@@ -477,8 +479,9 @@ module.exports.PowerdnsClient = class {
         for (let i = 0; i < records.length; i++) {
             ir.push(this.setHomogeneousRecords(records[i]))
         }
-        await Promise.all(ir);
-        return true;
+
+
+        return await Promise.all(ir);
     }
     /**
      * Searches for records in a zone by comparing the RECORDS field NOT the name field. Replaces the found records with the replace string.
@@ -605,5 +608,37 @@ module.exports.PowerdnsClient = class {
             }
         }
         return res;
+    }
+    /**
+     * Higher level function for creating a zone with a custom soa record, name servers and dnssec
+     * @async
+     * @param {Object} zone string to search for
+     * @returns {Boolean} success on true
+     * @example
+      await pdns.createAndSetupZone({
+             domain: 'example.com',
+             nameserver: ['ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain'],
+             hostmasterEmail:'hostmaster@paulisttoll.somedomain',
+        
+    })
+     */
+
+
+
+    async createAndSetupZone(zone) {
+        await this.createZone(zone.domain);
+        await this.setRecords([{
+            name: "example.com",
+            type: "SOA",
+            ttl: 3600,
+            content: [`${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace('@','.')}. 2020111501 10800 3600 604800 3600`]
+        }, {
+            name: "example.com",
+            type: "NS",
+            ttl: 3600,
+            content: zone.nameserver.map(e => this.absoluteName(e))
+        }]);
+        await this.createCryptokey(zone.domain);
+
     }
 }
