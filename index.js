@@ -275,6 +275,7 @@ module.exports.PowerdnsClient = class {
                 records: recordsOut
             });
         }
+        console.log(rrsets);
         return f(this.baseurl + '/zones/' + zoneName, {
             method: 'PATCH',
             headers: {
@@ -621,16 +622,18 @@ module.exports.PowerdnsClient = class {
             if (e.toString().includes('Conflict')) console.log('domain already exists: skipping creation')
         });
         await this.setRecords([{
-            name: "example.com",
+            name: zone.domain,
             type: "SOA",
             ttl: 3600,
             content: [`${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace('@','.')}. 2020111501 10800 3600 604800 3600`]
         }, {
-            name: "example.com",
+            name: zone.domain,
             type: "NS",
             ttl: 3600,
             content: zone.nameserver.map(e => this.absoluteName(e))
-        }]);
+        }]).catch(e => {
+            console.log(e)
+        });
         return await this.createCryptokey(zone.domain);
 
     }
