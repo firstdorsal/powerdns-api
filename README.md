@@ -452,7 +452,7 @@ Higher level function for creating a zone with a custom soa record, name servers
 ```js
 await pdns.createAndSetupZone({
              domain: 'example.com',
-             nameserver: ['ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain'],
+             nameserver: ['ns1.paulisttoll.somedomain', 'ns2.paulisttoll.somedomain', 'ns3.paulisttoll.somedomain'],
              hostmasterEmail:'hostmaster@paulisttoll.somedomain',
         
     })
