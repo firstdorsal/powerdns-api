@@ -97,11 +97,12 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mail
         * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
         * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
         * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
-        * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+        * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>Array</code>
         * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
         * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
         * [.findRecords(find, zone)](#module_powerdns-api.PowerdnsClient+findRecords) ⇒ <code>Array</code>
         * [.findRecordsGlobal(find)](#module_powerdns-api.PowerdnsClient+findRecordsGlobal) ⇒ <code>Array</code>
+        * [.createAndSetupZone(zone)](#module_powerdns-api.PowerdnsClient+createAndSetupZone) ⇒ <code>Boolean</code>
 
 <a name="module_powerdns-api.PowerdnsClient"></a>
 
@@ -122,11 +123,12 @@ Class representing the powerdns client
     * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
     * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
     * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
-    * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>boolean</code>
+    * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>Array</code>
     * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
     * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
     * [.findRecords(find, zone)](#module_powerdns-api.PowerdnsClient+findRecords) ⇒ <code>Array</code>
     * [.findRecordsGlobal(find)](#module_powerdns-api.PowerdnsClient+findRecordsGlobal) ⇒ <code>Array</code>
+    * [.createAndSetupZone(zone)](#module_powerdns-api.PowerdnsClient+createAndSetupZone) ⇒ <code>Boolean</code>
 
 <a name="new_module_powerdns-api.PowerdnsClient_new"></a>
 
@@ -330,11 +332,11 @@ await pdns.createCryptokey("example.com");
 ```
 <a name="module_powerdns-api.PowerdnsClient+setRecords"></a>
 
-#### powerdnsClient.setRecords(records) ⇒ <code>boolean</code>
+#### powerdnsClient.setRecords(records) ⇒ <code>Array</code>
 Takes records for single or mixed domains as array and sets them. If records exist it replaces them.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>boolean</code> - indicating the end of the operation  
+**Returns**: <code>Array</code> - array of booleans indicating the success of each entry  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -426,6 +428,27 @@ Searches for records on the pdns server by comparing the RECORDS field NOT the n
 **Example**  
 ```js
 await pdns.findRecordsGlobal('1.1.1.1');
+```
+<a name="module_powerdns-api.PowerdnsClient+createAndSetupZone"></a>
+
+#### powerdnsClient.createAndSetupZone(zone) ⇒ <code>Boolean</code>
+Higher level function for creating a zone with a custom soa record, name servers and dnssec
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>Boolean</code> - success on true  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| zone | <code>Object</code> | string to search for |
+
+**Example**  
+```js
+await pdns.createAndSetupZone({
+             domain: 'example.com',
+             nameserver: ['ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain', 'ns1.paulisttoll.somedomain'],
+             hostmasterEmail:'hostmaster@paulisttoll.somedomain',
+        
+    })
 ```
 <a name="Cryptokey"></a>
 
