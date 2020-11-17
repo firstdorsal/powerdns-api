@@ -1,6 +1,6 @@
 'use strict';
 const f = require("node-fetch")
-
+const secondLevelRegex = new RegExp(/[A-Z-a-z0-9]{1,63}\.[A-Z-a-z0-9]{1,63}$/);
 /** 
  * @typedef Cryptokey
  * @type {object}      
@@ -52,6 +52,8 @@ const f = require("node-fetch")
  *
  */
 
+
+
 /** @module powerdns-api */
 /** @class Class representing the powerdns client 
 *@example 
@@ -67,7 +69,6 @@ const f = require("node-fetch")
     console.log(await pdns.getZone('example.com'));
 })();
 */
-
 module.exports.PowerdnsClient = class {
     /**
      * Create a powerdns client.
@@ -142,7 +143,7 @@ module.exports.PowerdnsClient = class {
      */
     createZone(zoneName, kind = 'Native') {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         return f(`${this.baseurl}/zones`, {
             method: 'POST',
             headers: {
@@ -196,7 +197,7 @@ module.exports.PowerdnsClient = class {
      */
     getZone(zoneName) {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'GET',
             headers: {
@@ -220,7 +221,7 @@ module.exports.PowerdnsClient = class {
      */
     deleteZone(zoneName) {
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         return f(this.baseurl + '/zones/' + zoneNameSan, {
             method: 'DELETE',
             headers: {
@@ -253,7 +254,7 @@ module.exports.PowerdnsClient = class {
         if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
 
         const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
             let recordsOut = [];
@@ -316,7 +317,7 @@ module.exports.PowerdnsClient = class {
     deleteRecords(records) {
         if (!Array.isArray(records)) throw new TypeError('Parameter must be of type array');
         const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
 
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
@@ -424,7 +425,7 @@ module.exports.PowerdnsClient = class {
         if (!cryptokey.keytype) throw new Error('Missing keytype');
 
         const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(/[A-Z-a-z0-9]*\.[A-Z-a-z0-9]*$/)[0];
+        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
             method: 'POST',
             headers: {
@@ -622,12 +623,12 @@ module.exports.PowerdnsClient = class {
             if (e.toString().includes('Conflict')) console.log('domain already exists: skipping creation')
         });
         await this.setRecords([{
-            name: zone.domain.match(/\..*$/)[0].substr(1),
+            name: zone.domain.match(secondLevelRegex)[0],
             type: "SOA",
             ttl: 3600,
             content: [`${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace('@','.')}. 2020111501 10800 3600 604800 3600`]
         }, {
-            name: zone.domain.match(/\..*$/)[0].substr(1),
+            name: zone.domain.match(secondLevelRegex)[0],
             type: "NS",
             ttl: 3600,
             content: zone.nameserver.map(e => this.absoluteName(e))
