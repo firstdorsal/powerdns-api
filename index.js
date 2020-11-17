@@ -276,7 +276,6 @@ module.exports.PowerdnsClient = class {
                 records: recordsOut
             });
         }
-        console.log(rrsets);
         return f(this.baseurl + '/zones/' + zoneName, {
             method: 'PATCH',
             headers: {
