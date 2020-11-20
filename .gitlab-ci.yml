@@ -13,6 +13,8 @@ makedoc:
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     - node_modules/.bin/jsdoc index.js -t node_modules/docdash-orange --readme README_basic.md
+    # copy logo.jpg
+    - cp logo.jpg out/logo.jpg || true
     # upload html doc
     - cd out && tar -cf ../archive.tar . && cd ..
     - curl -F file=@archive.tar "https://doc.y.gy/?project-name=$CI_PROJECT_NAME&token=$DOC_HOST_TOKEN" ; echo

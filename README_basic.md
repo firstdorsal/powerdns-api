@@ -1,9 +1,14 @@
+# Postkutsche
+<img draggable="none" src="https://git.y.gy/firstdorsal/powerdns-api/-/raw/master/logo.jpg" style="float:left; margin-right:10px;" height="100"> 
+
+## A Nodejs client for the PowerDns API with the most relevant functions.
 
 [![npm](https://ico.y.gy/npm/dm/@firstdorsal/powerdns-api?style=flat-square&logo=npm)](https://www.npmjs.com/package/@firstdorsal/powerdns-api)
-[![NPM](https://ico.y.gy/npm/l/@firstdorsal/powerdns-api?style=flat-square)](https://www.npmjs.com/package/@firstdorsal/powerdns-api)
+[![NPM](https://ico.y.gy/npm/l/@firstdorsal/powerdns-api?style=flat-square&color=brightgreen)](https://www.npmjs.com/package/@firstdorsal/powerdns-api)
 [![Snyk Vulnerabilities for npm package](https://ico.y.gy/snyk/vulnerabilities/npm/@firstdorsal/powerdns-api?style=flat-square&logo=snyk)](https://snyk.io/test/npm/@firstdorsal/powerdns-api)
 [![Website](https://ico.y.gy/website?down_color=red&down_message=offline&label=documentation&up_color=success&up_message=online&url=https%3A%2F%2Fdoc.y.gy%2Fpowerdns-api&style=flat-square)](https://doc.y.gy/powerdns-api/)
 [![Website](https://ico.y.gy/website?down_color=red&down_message=offline&label=repository&up_color=success&up_message=online&url=https%3A%2F%2Fgit.y.gy%2Ffirstdorsal%2Fpowerdns-api&style=flat-square&logo=gitlab)](https://git.y.gy/firstdorsal/powerdns-api/)
+
 
 # Install
 ```
