@@ -1,4 +1,4 @@
-# Postkutsche
+# Powerdns API
 <img draggable="none" src="https://git.y.gy/firstdorsal/powerdns-api/-/raw/master/logo.jpg" style="float:left; margin-right:10px;" height="100"> 
 
 ## A Nodejs client for the PowerDns API with the most relevant functions.
