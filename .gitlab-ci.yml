@@ -33,9 +33,6 @@ mirror:
     - DOC_URL=https://doc.y.gy
     #install
     - yarn add docdash-orange jsdoc jsdoc-to-markdown --dev
-    # generate index.js from raw
-    - cat index.raw.js > index.js
-    - sed -i "s|DOC_URL|$DOC_URL/$CI_PROJECT_NAME|g" index.js
     # generate doc
     - echo "**This is a mirror of [$CI_SERVER_HOST/$CI_PROJECT_PATH](https://$CI_SERVER_HOST/$CI_PROJECT_PATH)**" > README.md
     - cat README_basic.md >> README.md
