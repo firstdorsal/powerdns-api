@@ -109,6 +109,8 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mail
         * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
         * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
         * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
+        * [.getCryptoKeys(zoneName)](#module_powerdns-api.PowerdnsClient+getCryptoKeys) ⇒ [<code>Array.&lt;Cryptokey&gt;</code>](#Cryptokey)
+        * [.deleteCryptoKey(zoneName, cryptokeyId)](#module_powerdns-api.PowerdnsClient+deleteCryptoKey) ⇒ <code>boolean</code>
         * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>Array</code>
         * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
         * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
@@ -135,6 +137,8 @@ Class representing the powerdns client
     * [.search(search)](#module_powerdns-api.PowerdnsClient+search) ⇒ <code>object</code>
     * [.appendRecord(record)](#module_powerdns-api.PowerdnsClient+appendRecord) ⇒ <code>boolean</code>
     * [.createCryptokey(zoneName, [cryptokey], [returnPrivateKey])](#module_powerdns-api.PowerdnsClient+createCryptokey) ⇒ <code>Object</code>
+    * [.getCryptoKeys(zoneName)](#module_powerdns-api.PowerdnsClient+getCryptoKeys) ⇒ [<code>Array.&lt;Cryptokey&gt;</code>](#Cryptokey)
+    * [.deleteCryptoKey(zoneName, cryptokeyId)](#module_powerdns-api.PowerdnsClient+deleteCryptoKey) ⇒ <code>boolean</code>
     * [.setRecords(records)](#module_powerdns-api.PowerdnsClient+setRecords) ⇒ <code>Array</code>
     * [.replaceRecords(find, replace, zone)](#module_powerdns-api.PowerdnsClient+replaceRecords) ⇒ <code>Number</code>
     * [.replaceRecordsGlobal(find, replace)](#module_powerdns-api.PowerdnsClient+replaceRecordsGlobal) ⇒ <code>Number</code>
@@ -342,6 +346,39 @@ Creates a DNS Cryptokey and enables it for DNSSEC. If you want to import your ow
 ```js
 await pdns.createCryptokey("example.com");
 ```
+<a name="module_powerdns-api.PowerdnsClient+getCryptoKeys"></a>
+
+#### powerdnsClient.getCryptoKeys(zoneName) ⇒ [<code>Array.&lt;Cryptokey&gt;</code>](#Cryptokey)
+Get the crypotkeys for a given zone.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: [<code>Array.&lt;Cryptokey&gt;</code>](#Cryptokey) - on success the cryptokeys of the zone will be returned  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| zoneName | <code>string</code> | name of the zone/domain |
+
+**Example**  
+```js
+await pdns.getCryptoKeys("example.com");
+```
+<a name="module_powerdns-api.PowerdnsClient+deleteCryptoKey"></a>
+
+#### powerdnsClient.deleteCryptoKey(zoneName, cryptokeyId) ⇒ <code>boolean</code>
+Delete a cryptokey with specified id from specified zone.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>boolean</code> - true on success  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| zoneName | <code>string</code> | name of the zone/domain |
+| cryptokeyId | <code>string</code> | id of the cryptokey |
+
+**Example**  
+```js
+await pdns.deleteCryptoKey("example.com",171);
+```
 <a name="module_powerdns-api.PowerdnsClient+setRecords"></a>
 
 #### powerdnsClient.setRecords(records) ⇒ <code>Array</code>
@@ -444,10 +481,10 @@ await pdns.findRecordsGlobal('1.1.1.1');
 <a name="module_powerdns-api.PowerdnsClient+createAndSetupZone"></a>
 
 #### powerdnsClient.createAndSetupZone(zone) ⇒ <code>Boolean</code>
-Higher level function for creating a zone with a custom soa record, name servers and dnssec
+Higher level function for creating a zone with a custom soa record, name servers and dnssec/cryptokey. Skips creating zone and/or cryptokey if it exists.
 
 **Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>Boolean</code> - success on true  
+**Returns**: <code>Boolean</code> - true on success  
 
 | Param | Type | Description |
 | --- | --- | --- |
