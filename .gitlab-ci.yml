@@ -62,6 +62,5 @@ publish:
     - cat README_basic.md > README.md
     - node_modules/.bin/jsdoc2md index.js >> README.md
     #publish to npm
-    - echo '//registry.npmjs.org/:_authToken=$NPM_TOKEN'>.npmrc
-    - npm login
-    - npm publish
+    - npm config set '//registry.npmjs.org/:_authToken=$NPM_TOKEN'
+    - npm publish --verbose
