@@ -1,31 +1,35 @@
 {
-  "name": "@firstdorsal/powerdns-api",
-  "version": "1.8.0",
-  "description": "A Nodejs client for the PowerDns API with the most relevant functions.",
-  "main": "index.js",
-  "author": "Paul Colin Hennig",
-  "license": "MIT",
-  "dependencies": {
-    "node-fetch": "^2.6.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://git.y.gy/firstdorsal/powerdns-api.git"
-  },
-  "homepage": "https://doc.y.gy/powerdns-api/",
-  "keywords": [
-    "powerdns",
-    "dns",
-    "api",
-    "wrapper",
-    "pdns",
-    "pdns-api",
-    "powerdns-api",
-    "client",
-    "server"
-  ],
-  "devDependencies": {
-    "dotenv": "^8.2.0",
-    "eslint": "^7.7.0"
-  }
+    "name": "@firstdorsal/powerdns-api",
+    "version": "1.9.0",
+    "description": "A Nodejs client for the PowerDns API with the most relevant functions.",
+    "main": "index.js",
+    "author": "Paul Colin Hennig",
+    "license": "MIT",
+    "dependencies": {
+        "node-fetch": "^2.6.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://git.y.gy/firstdorsal/powerdns-api.git"
+    },
+    "homepage": "https://doc.y.gy/powerdns-api/",
+    "keywords": [
+        "powerdns",
+        "dns",
+        "api",
+        "wrapper",
+        "pdns",
+        "pdns-api",
+        "powerdns-api",
+        "client",
+        "server"
+    ],
+    "devDependencies": {
+        "dotenv": "^8.2.0",
+        "eslint": "^7.7.0",
+        "jest": "^26.6.3"
+    },
+    "scripts": {
+        "test": "jest --coverage=true"
+    }
 }

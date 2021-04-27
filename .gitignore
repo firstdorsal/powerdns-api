@@ -1,8 +1,8 @@
 node_modules
 .env
-test.js
 out
 .eslintrc.js
 generateDoc.sh
-testrun.js
 .directory
+old-tests
+coverage
