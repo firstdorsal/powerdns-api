@@ -31,6 +31,7 @@ mirror:
   stage: mirror
   script:
     - DOC_URL=https://doc.y.gy
+    - USERNAME=firstdorsal
     #install
     - yarn add docdash-orange jsdoc jsdoc-to-markdown --dev
     # generate doc
@@ -46,6 +47,7 @@ mirror:
     - git add -A
     - git commit -m "🤖 mirror [skip ci]"
     - curl -u "firstdorsal:$GITHUB_TOKEN" https://api.github.com/user/repos -d "{\"name\":\"$CI_PROJECT_NAME\"}"
+    - curl --request PATCH -u "${USERNAME}:$GITHUB_TOKEN" https://api.github.com/repos/${USERNAME}/$CI_PROJECT_NAME -d "{\"description\":\"This is a mirror of ${CI_PROJECT_URL}\"}"
     - git push --set-upstream origin HEAD:refs/heads/master -f
     #gitlab
     - git remote remove origin
