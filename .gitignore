@@ -6,3 +6,4 @@ generateDoc.sh
 .directory
 old-tests
 coverage
+test.js

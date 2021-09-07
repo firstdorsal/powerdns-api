@@ -205,12 +205,13 @@ module.exports.PowerdnsClient = class {
      * @example 
        await pdns.getZone('example.com');
      */
-    getZone = async zoneName => {
+    async getZone(zoneName) {
         if (typeof zoneName !== "string") throw new TypeError("zoneName must be of type string");
         const a = await this.getZoneWithMeta(zoneName);
 
         return a && a.rrsets ? a.rrsets : [];
-    };
+    }
+
     /**
      * Deletes the whole zone with all attached metadata and rrsets.
      * @async
