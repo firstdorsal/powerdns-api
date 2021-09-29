@@ -99,10 +99,10 @@ Feel free to contact me via [xl9jthv_7bvgakv9o9wg0jabn2ylm91xxrzzgt0e@y.gy](mail
 * [powerdns-api](#module_powerdns-api)
     * [.PowerdnsClient](#module_powerdns-api.PowerdnsClient)
         * [new module.exports.PowerdnsClient(baseurl, apikey)](#new_module_powerdns-api.PowerdnsClient_new)
-        * [.getZone](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
         * [.getZones()](#module_powerdns-api.PowerdnsClient+getZones) ⇒ <code>Array</code>
         * [.createZone(zoneName, [kind])](#module_powerdns-api.PowerdnsClient+createZone) ⇒ <code>Object</code>
         * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
+        * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
         * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
         * [.setHomogeneousRecords(records)](#module_powerdns-api.PowerdnsClient+setHomogeneousRecords) ⇒ <code>boolean</code>
         * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
@@ -127,10 +127,10 @@ Class representing the powerdns client
 
 * [.PowerdnsClient](#module_powerdns-api.PowerdnsClient)
     * [new module.exports.PowerdnsClient(baseurl, apikey)](#new_module_powerdns-api.PowerdnsClient_new)
-    * [.getZone](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
     * [.getZones()](#module_powerdns-api.PowerdnsClient+getZones) ⇒ <code>Array</code>
     * [.createZone(zoneName, [kind])](#module_powerdns-api.PowerdnsClient+createZone) ⇒ <code>Object</code>
     * [.getZoneWithMeta(zoneName)](#module_powerdns-api.PowerdnsClient+getZoneWithMeta) ⇒ <code>object</code>
+    * [.getZone(zoneName)](#module_powerdns-api.PowerdnsClient+getZone) ⇒ <code>object</code>
     * [.deleteZone(zoneName)](#module_powerdns-api.PowerdnsClient+deleteZone) ⇒ <code>boolean</code>
     * [.setHomogeneousRecords(records)](#module_powerdns-api.PowerdnsClient+setHomogeneousRecords) ⇒ <code>boolean</code>
     * [.deleteRecords(records)](#module_powerdns-api.PowerdnsClient+deleteRecords) ⇒ <code>boolean</code>
@@ -170,22 +170,6 @@ Create a powerdns client.
 
     console.log(await pdns.getZone('example.com'));
 })();
-```
-<a name="module_powerdns-api.PowerdnsClient+getZone"></a>
-
-#### powerdnsClient.getZone ⇒ <code>object</code>
-Returns array with rrsets for zone.
-
-**Kind**: instance property of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
-**Returns**: <code>object</code> - just the rrsets of the zone  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| zoneName | <code>string</code> | takes a domain name |
-
-**Example**  
-```js
-await pdns.getZone('example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+getZones"></a>
 
@@ -230,6 +214,22 @@ Returns single zone with meta information.
 **Example**  
 ```js
 await pdns.getZoneWithMeta('example.com');
+```
+<a name="module_powerdns-api.PowerdnsClient+getZone"></a>
+
+#### powerdnsClient.getZone(zoneName) ⇒ <code>object</code>
+Returns array with rrsets for zone.
+
+**Kind**: instance method of [<code>PowerdnsClient</code>](#module_powerdns-api.PowerdnsClient)  
+**Returns**: <code>object</code> - just the rrsets of the zone  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| zoneName | <code>string</code> | takes a domain name |
+
+**Example**  
+```js
+await pdns.getZone('example.com');
 ```
 <a name="module_powerdns-api.PowerdnsClient+deleteZone"></a>
 
