@@ -1,6 +1,5 @@
 "use strict";
 const f = require("node-fetch");
-const secondLevelRegex = new RegExp(/[A-Z-a-z0-9]{1,63}\.[A-Z-a-z0-9]{1,63}$/);
 /**
  * @typedef Cryptokey
  * @type {object}
@@ -142,8 +141,6 @@ module.exports.PowerdnsClient = class {
     createZone(zoneName, kind = "Native") {
         if (typeof zoneName !== "string") throw new TypeError("zoneName must be of type string");
 
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         return f(`${this.baseurl}/zones`, {
             method: "POST",
             headers: {
@@ -151,7 +148,7 @@ module.exports.PowerdnsClient = class {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name: zoneNameSan + ".",
+                name: this.absoluteName(zoneName),
                 kind
             })
         })
@@ -179,9 +176,8 @@ module.exports.PowerdnsClient = class {
      */
     getZoneWithMeta(zoneName) {
         if (typeof zoneName !== "string") throw new TypeError("zoneName must be of type string");
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
-        return f(this.baseurl + "/zones/" + zoneNameSan, {
+
+        return f(this.baseurl + "/zones/" + this.absoluteName(zoneName), {
             method: "GET",
             headers: {
                 "X-Api-Key": this.apikey
@@ -222,9 +218,8 @@ module.exports.PowerdnsClient = class {
      */
     deleteZone(zoneName) {
         if (typeof zoneName !== "string") throw new TypeError("zoneName must be of type string");
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
-        return f(this.baseurl + "/zones/" + zoneNameSan, {
+
+        return f(this.baseurl + "/zones/" + this.absoluteName(zoneName), {
             method: "DELETE",
             headers: {
                 "X-Api-Key": this.apikey
@@ -257,8 +252,6 @@ module.exports.PowerdnsClient = class {
     setHomogeneousRecords(records) {
         if (!Array.isArray(records)) throw new TypeError("records must be of type array");
 
-        const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
             let recordsOut = [];
@@ -279,7 +272,7 @@ module.exports.PowerdnsClient = class {
                 records: recordsOut
             });
         }
-        return f(this.baseurl + "/zones/" + zoneName, {
+        return f(this.baseurl + "/zones/" + this.absoluteName(records[0].name), {
             method: "PATCH",
             headers: {
                 "X-Api-Key": this.apikey
@@ -319,8 +312,6 @@ module.exports.PowerdnsClient = class {
      */
     deleteRecords(records) {
         if (!Array.isArray(records)) throw new TypeError("records must be of type array");
-        const dname = this.absoluteName(records[0].name);
-        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
 
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
@@ -331,7 +322,7 @@ module.exports.PowerdnsClient = class {
             });
         }
 
-        return f(this.baseurl + "/zones/" + zoneName, {
+        return f(this.baseurl + "/zones/" + this.absoluteName(records[0].name), {
             method: "PATCH",
             headers: {
                 "X-Api-Key": this.apikey
@@ -434,9 +425,7 @@ module.exports.PowerdnsClient = class {
         if (!zoneName) throw new Error("Missing zone/domain name");
         if (!cryptokey.keytype) throw new Error("Missing keytype");
 
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
-        return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
+        return f(`${this.baseurl}/zones/${this.absoluteName(zoneName)}/cryptokeys`, {
             method: "POST",
             headers: {
                 "X-Api-Key": this.apikey
@@ -466,10 +455,7 @@ module.exports.PowerdnsClient = class {
      */
     getCryptoKeys(zoneName) {
         if (!zoneName) throw new Error("Missing zone/domain name");
-
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
-        return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys`, {
+        return f(`${this.baseurl}/zones/${this.absoluteName(zoneName)}/cryptokeys`, {
             method: "GET",
             headers: {
                 "X-Api-Key": this.apikey
@@ -497,10 +483,7 @@ module.exports.PowerdnsClient = class {
      */
     deleteCryptoKey(zoneName, cryptokeyId) {
         if (!zoneName) throw new Error("Missing zone/domain name");
-
-        const dname = this.absoluteName(zoneName);
-        const zoneNameSan = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
-        return f(`${this.baseurl}/zones/${zoneNameSan}/cryptokeys/${cryptokeyId}`, {
+        return f(`${this.baseurl}/zones/${this.absoluteName(zoneName)}/cryptokeys/${cryptokeyId}`, {
             method: "DELETE",
             headers: {
                 "X-Api-Key": this.apikey
@@ -710,13 +693,18 @@ await pdns.createAndSetupZone({
         });
         await this.setRecords([
             {
-                name: zone.domain.match(secondLevelRegex)[0],
+                name: this.absoluteName(zone.domain),
                 type: "SOA",
                 ttl: 3600,
-                content: [`${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace("@", ".")}. 2020111501 10800 3600 604800 3600`]
+                content: [
+                    `${this.absoluteName(zone.nameserver[0])} ${zone.hostmasterEmail.replace(
+                        "@",
+                        "."
+                    )}. 2020111501 10800 3600 604800 3600`
+                ]
             },
             {
-                name: zone.domain.match(secondLevelRegex)[0],
+                name: this.absoluteName(zone.domain),
                 type: "NS",
                 ttl: 3600,
                 content: zone.nameserver.map(e => this.absoluteName(e))
