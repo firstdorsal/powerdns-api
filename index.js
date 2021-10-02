@@ -240,6 +240,7 @@ module.exports.PowerdnsClient = class {
      * Takes records for a SINGLE domain as array and sets them. If records exist it replaces them.
      * @async
      * @param {Records} records array containing the records
+     * @param {string} [domain] optional domain name
      * @returns {boolean} boolean indicating the success of the operation
      * @example 
        await pdns.setHomogeneousRecords([{
@@ -249,9 +250,12 @@ module.exports.PowerdnsClient = class {
            content: ['1.1.1.1']
        }]);
      */
-    setHomogeneousRecords(records) {
+    setHomogeneousRecords(records, domain) {
         if (!Array.isArray(records)) throw new TypeError("records must be of type array");
 
+        const dname = this.absoluteName(records[0].name);
+        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
+        if (!domain) domain = zoneName;
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
             let recordsOut = [];
@@ -272,7 +276,7 @@ module.exports.PowerdnsClient = class {
                 records: recordsOut
             });
         }
-        return f(this.baseurl + "/zones/" + this.absoluteName(records[0].name), {
+        return f(this.baseurl + "/zones/" + domain, {
             method: "PATCH",
             headers: {
                 "X-Api-Key": this.apikey
@@ -310,9 +314,11 @@ module.exports.PowerdnsClient = class {
            type: "A"
        }]);
      */
-    deleteRecords(records) {
+    deleteRecords(records, domain) {
         if (!Array.isArray(records)) throw new TypeError("records must be of type array");
-
+        const dname = this.absoluteName(records[0].name);
+        const zoneName = dname.substr(0, dname.length - 1).match(secondLevelRegex)[0];
+        if (!domain) domain = zoneName;
         let rrsets = [];
         for (let i = 0; i < records.length; i++) {
             rrsets.push({
@@ -322,7 +328,7 @@ module.exports.PowerdnsClient = class {
             });
         }
 
-        return f(this.baseurl + "/zones/" + this.absoluteName(records[0].name), {
+        return f(this.baseurl + "/zones/" + this.absoluteName(domain), {
             method: "PATCH",
             headers: {
                 "X-Api-Key": this.apikey
@@ -693,7 +699,7 @@ await pdns.createAndSetupZone({
         });
         await this.setRecords([
             {
-                name: this.absoluteName(zone.domain),
+                name: zone.domain,
                 type: "SOA",
                 ttl: 3600,
                 content: [
@@ -704,7 +710,7 @@ await pdns.createAndSetupZone({
                 ]
             },
             {
-                name: this.absoluteName(zone.domain),
+                name: zone.domain,
                 type: "NS",
                 ttl: 3600,
                 content: zone.nameserver.map(e => this.absoluteName(e))
