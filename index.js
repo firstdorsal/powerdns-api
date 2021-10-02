@@ -1,5 +1,7 @@
 "use strict";
 const f = require("node-fetch");
+const secondLevelRegex = new RegExp(/[A-Z-a-z0-9]{1,63}\.[A-Z-a-z0-9]{1,63}$/);
+
 /**
  * @typedef Cryptokey
  * @type {object}
